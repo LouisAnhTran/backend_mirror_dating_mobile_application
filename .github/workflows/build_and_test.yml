@@ -93,11 +93,20 @@ jobs:
       run: |
         aws ecr get-login-password --region ${{ vars.AWS_REGION_TEST }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
+
+    - name: Export dependencies 
+      run: |
+        poetry export -f requirements.txt --output requirements.txt --without-hashes
+        
     - name: Build, tag, and push Docker image
       run: |
-        docker build -t my-fastapi-app:latest .
-        docker tag my-fastapi-app:latest ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
-        docker push ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
+        docker build -t pdf-query-pro-backend:latest .
+        docker tag my-fastapi-app:latest ${{ secrets.ECR_REGISTRY }}:latest
+        docker push ${{ secrets.ECR_REGISTRY }}:latest
 
     - name: Deploy to EC2
       env:
