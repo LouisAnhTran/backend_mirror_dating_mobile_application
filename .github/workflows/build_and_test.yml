@@ -27,6 +27,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       PINECONE_VECTOR_DIMENSION: ${{ vars.PINECONE_VECTOR_DIMENSION }}
       RDS_POSTGRESQL_PASSWORD: ${{ vars.RDS_POSTGRESQL_PASSWORD }}
+      WORKFLOW_IMAGE_NAME:  ${{ vars.WORKFLOW_IMAGE_NAME }}
       
     steps:
     - name: Checkout code
