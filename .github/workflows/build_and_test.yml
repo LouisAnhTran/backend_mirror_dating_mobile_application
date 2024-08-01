@@ -170,6 +170,8 @@ jobs:
 
             docker ps
 
+            sleep 5
+
             docker logs pdf_query_pro_backend_container
 
             # Add more commands as needed
