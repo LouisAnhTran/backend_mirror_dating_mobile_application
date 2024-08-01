@@ -176,7 +176,7 @@ jobs:
               exit 1
             fi
 
-            sleep 10 
+            sleep 20
 
             docker logs pdf_query_pro_backend_container
 
