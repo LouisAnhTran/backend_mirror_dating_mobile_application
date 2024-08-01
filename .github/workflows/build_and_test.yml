@@ -119,6 +119,9 @@ jobs:
     if: success()
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - name: Decode and save the PEM file
         run: |
           echo "${{ secrets.EC2_PEM_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
