@@ -136,37 +136,6 @@ jobs:
 
             docker-compose down
 
-            rm -f docker-compose.yml
-
-            # Create a new Docker Compose file
-            cat > docker-compose.yml <<EOL
-version: '3.8'
-
-services:
-  pdf-query-pro-backend:
-    image: \${{ secrets.WORKFLOW_IMAGE_NAME }}:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=\${{ secrets.DATABASE_URL }}
-      - PORT_PROD=\${{ vars.PORT_PROD }}
-      - PORT_DEV=\${{ vars.PORT_DEV }}
-      - SECRET_KEY=\${{ secrets.SECRET_KEY }}
-      - ALGORITHM=\${{ secrets.ALGORITHM }}
-      - ACCESS_TOKEN_EXPIRES_MINUTES=\${{ vars.ACCESS_TOKEN_EXPIRES_MINUTES }}
-      - AWS_ACCESS_KEY=\${{ secrets.AWS_ACCESS_KEY }}
-      - AWS_SECRET_ACCESS_KEY=\${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - AWS_BUCKET_NAME_DEV=\${{ vars.AWS_BUCKET_NAME_DEV }}
-      - AWS_REGION_TEST=\${{ vars.AWS_REGION_TEST }}
-      - PINECONE_API_KEY=\${{ secrets.PINECONE_API_KEY }}
-      - PINECONE_INDEX=\${{ vars.PINECONE_INDEX }}
-      - OPENAI_API_KEY=\${{ secrets.OPENAI_API_KEY }}
-      - PINECONE_VECTOR_DIMENSION=\${{ vars.PINECONE_VECTOR_DIMENSION }}
-      - RDS_POSTGRESQL_PASSWORD=\${{ vars.RDS_POSTGRESQL_PASSWORD }}
-EOL
-
-            docker-compose up -d
-
+            docker-compose up
             # Add more commands as needed
           EOF
