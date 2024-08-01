@@ -165,6 +165,9 @@ jobs:
             echo "      - RDS_POSTGRESQL_PASSWORD=${{ vars.RDS_POSTGRESQL_PASSWORD }}" >> docker-compose.yml
 
             
-            docker-compose up
+            docker-compose up -d
+
+            docker ps
+
             # Add more commands as needed
           EOF
