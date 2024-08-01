@@ -123,7 +123,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Create PEM file
-        run: echo "${{ secrets.EC2_PEM_KEY }}" > pdf-query-pro-backend-key-pair.pem
+        run: echo "${{ secrets.EC2_PEM_SECRET }}" > pdf-query-pro-backend-key-pair.pem
 
       - name: Set permissions for PEM file
         run: chmod 400 pdf-query-pro-backend-key-pair.pem
