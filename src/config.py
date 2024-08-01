@@ -7,6 +7,10 @@ from src.utils.env_variable import convert_str_to_bool
 
 load_dotenv()
 
+
+for k,v in os.getenv.items():
+    print(f"env {k}: {v}")
+
 PORT=int(os.getenv("PORT_PROD")) if not convert_str_to_bool(os.getenv("LOCAL")) else int(os.getenv("PORT_DEV"))
 DATABASE_URL=os.getenv("DATABASE_URL")
 
