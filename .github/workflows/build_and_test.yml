@@ -108,8 +108,7 @@ jobs:
     - name: Build, tag, and push Docker image
       run: |
         docker-compose -f docker-compose.ci.yml build
-        # docker build -t pdf-query-pro-backend:latest .
-        docker tag pdf-query-pro-backend:latest ${{ secrets.ECR_REGISTRY }}:latest
+        docker tag ${{vars.WORKFLOW_IMAGE_NAME}}:latest ${{ secrets.ECR_REGISTRY }}:latest
         docker push ${{ secrets.ECR_REGISTRY }}:latest
         
   pull_image_and_deploy_in_ec2_instance:
