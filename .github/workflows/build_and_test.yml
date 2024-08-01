@@ -134,36 +134,36 @@ jobs:
             
             aws ecr get-login-password --region ${{vars.AWS_REGION_TEST}} | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
 
-            # rm -f docker-compose.yml
-
             docker-compose down
 
-            # # Create a new Docker Compose file using echo
-            # echo "version: '3.8'" > docker-compose.yml
-            # echo "" >> docker-compose.yml
-            # echo "services:" >> docker-compose.yml
-            # echo "  pdf-query-pro-backend:" >> docker-compose.yml
-            # echo "    image: ${{ secrets.ECR_REGISTRY }}:latest" >> docker-compose.yml
-            # echo "    pull_policy: always" >> docker-compose.yml
-            # echo "    ports:" >> docker-compose.yml
-            # echo "      - \"80:8000\"" >> docker-compose.yml
-            # echo "    environment:" >> docker-compose.yml
-            # echo "      DATABASE_URL: \${{ secrets.DATABASE_URL }}" >> docker-compose.yml
-            # echo "      PORT_PROD: \${{ vars.PORT_PROD }}" >> docker-compose.yml
-            # echo "      PORT_DEV: \${{ vars.PORT_DEV }}" >> docker-compose.yml
-            # echo "      SECRET_KEY: \${{ secrets.SECRET_KEY }}" >> docker-compose.yml
-            # echo "      ALGORITHM: \${{ secrets.ALGORITHM }}" >> docker-compose.yml
-            # echo "      ACCESS_TOKEN_EXPIRES_MINUTES: \${{ vars.ACCESS_TOKEN_EXPIRES_MINUTES }}" >> docker-compose.yml
-            # echo "      AWS_ACCESS_KEY: \${{ secrets.AWS_ACCESS_KEY }}" >> docker-compose.yml
-            # echo "      AWS_SECRET_ACCESS_KEY: \${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> docker-compose.yml
-            # echo "      AWS_BUCKET_NAME_DEV: \${{ vars.AWS_BUCKET_NAME_DEV }}" >> docker-compose.yml
-            # echo "      AWS_REGION_TEST: \${{ vars.AWS_REGION_TEST }}" >> docker-compose.yml
-            # echo "      PINECONE_API_KEY: \${{ secrets.PINECONE_API_KEY }}" >> docker-compose.yml
-            # echo "      PINECONE_INDEX: \${{ vars.PINECONE_INDEX }}" >> docker-compose.yml
-            # echo "      OPENAI_API_KEY: \${{ secrets.OPENAI_API_KEY }}" >> docker-compose.yml
-            # echo "      PINECONE_VECTOR_DIMENSION: \${{ vars.PINECONE_VECTOR_DIMENSION }}" >> docker-compose.yml
-            # echo "      RDS_POSTGRESQL_PASSWORD: \${{ vars.RDS_POSTGRESQL_PASSWORD }}" >> docker-compose.yml
-            # echo "      WORKFLOW_IMAGE_NAME: \${{ vars.WORKFLOW_IMAGE_NAME }}" >> docker-compose.yml
+            rm -f docker-compose.yml
+
+            # Create a new Docker Compose file using echo
+            echo "version: '3.8'" > docker-compose.yml
+            echo "" >> docker-compose.yml
+            echo "services:" >> docker-compose.yml
+            echo "  pdf-query-pro-backend:" >> docker-compose.yml
+            echo "    image: ${{ secrets.ECR_REGISTRY }}:latest" >> docker-compose.yml
+            echo "    pull_policy: always" >> docker-compose.yml
+            echo "    ports:" >> docker-compose.yml
+            echo "      - \"80:8000\"" >> docker-compose.yml
+            echo "    environment:" >> docker-compose.yml
+            echo "      DATABASE_URL: \${{ secrets.DATABASE_URL }}" >> docker-compose.yml
+            echo "      PORT_PROD: \${{ vars.PORT_PROD }}" >> docker-compose.yml
+            echo "      PORT_DEV: \${{ vars.PORT_DEV }}" >> docker-compose.yml
+            echo "      SECRET_KEY: \${{ secrets.SECRET_KEY }}" >> docker-compose.yml
+            echo "      ALGORITHM: \${{ secrets.ALGORITHM }}" >> docker-compose.yml
+            echo "      ACCESS_TOKEN_EXPIRES_MINUTES: \${{ vars.ACCESS_TOKEN_EXPIRES_MINUTES }}" >> docker-compose.yml
+            echo "      AWS_ACCESS_KEY: \${{ secrets.AWS_ACCESS_KEY }}" >> docker-compose.yml
+            echo "      AWS_SECRET_ACCESS_KEY: \${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> docker-compose.yml
+            echo "      AWS_BUCKET_NAME_DEV: \${{ vars.AWS_BUCKET_NAME_DEV }}" >> docker-compose.yml
+            echo "      AWS_REGION_TEST: \${{ vars.AWS_REGION_TEST }}" >> docker-compose.yml
+            echo "      PINECONE_API_KEY: \${{ secrets.PINECONE_API_KEY }}" >> docker-compose.yml
+            echo "      PINECONE_INDEX: \${{ vars.PINECONE_INDEX }}" >> docker-compose.yml
+            echo "      OPENAI_API_KEY: \${{ secrets.OPENAI_API_KEY }}" >> docker-compose.yml
+            echo "      PINECONE_VECTOR_DIMENSION: \${{ vars.PINECONE_VECTOR_DIMENSION }}" >> docker-compose.yml
+            echo "      RDS_POSTGRESQL_PASSWORD: \${{ vars.RDS_POSTGRESQL_PASSWORD }}" >> docker-compose.yml
+            echo "      WORKFLOW_IMAGE_NAME: \${{ vars.WORKFLOW_IMAGE_NAME }}" >> docker-compose.yml
 
             
             docker-compose up
