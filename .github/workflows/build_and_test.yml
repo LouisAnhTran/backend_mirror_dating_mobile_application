@@ -27,7 +27,7 @@ jobs:
       env:
         DATABASE_URL: ${{secrets.DATABASE_URL}}
       run: |
-        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+        export DATABASE_URL=$DATABASE_URL
 
     - name: Run tests
       run: |
