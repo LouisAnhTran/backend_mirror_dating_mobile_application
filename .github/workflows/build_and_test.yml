@@ -124,6 +124,7 @@ jobs:
         
       - name: Decode and save the PEM file
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.EC2_PEM_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
