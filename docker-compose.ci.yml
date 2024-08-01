@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   pdf-query-pro-backend:
-    image: pdf-query-pro-backend:latest
+    image: ${WORKFLOW_IMAGE_NAME}:latest
     build:
       context: .
       dockerfile: Dockerfile
