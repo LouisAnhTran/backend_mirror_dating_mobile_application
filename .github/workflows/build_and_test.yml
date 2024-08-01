@@ -119,15 +119,21 @@ jobs:
     if: success()
 
     steps:
-      - name: Deploy to EC2
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          API_KEY: ${{ secrets.API_KEY }}
+      - name: Decode and save the PEM file
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            docker pull ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
-            docker stop my-fastapi-app || true
-            docker rm my-fastapi-app || true
-            docker run -d -p 80:80 --name my-fastapi-app -e DB_PASSWORD=${DB_PASSWORD} -e API_KEY=${API_KEY} ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
+          echo "${{ secrets.EC2_PEM_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add SSH key to the agent
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Run commands on EC2 instance
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@47.128.237.25 <<'EOF'
+            ls -ltr
+            git pull origin main
+            # Add any other commands you need to run on your EC2 instance
           EOF
   
