@@ -24,10 +24,10 @@ jobs:
         pip install -r requirements.txt
 
     - name: Set environment variables
+      env:
+        DATABASE_URL: ${{secrets.DATABASE_URL}}
       run: |
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-        echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
-        echo "MY_ENV_VARIABLE=${{ vars.MY_ENV_VARIABLE }}" >> $GITHUB_ENV
+        echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
 
     - name: Run tests
       run: |
