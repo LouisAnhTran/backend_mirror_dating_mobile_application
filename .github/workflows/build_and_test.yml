@@ -121,23 +121,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Decode and save the PEM file
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PEM_KEY_BASE64 }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
 
-      - name: Add SSH key to the agent
-        run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+      - name: Create PEM file
+        run: echo "${{ secrets.EC2_PEM_KEY }}" > pdf-query-pro-backend-key-pair.pem
 
-      - name: Run commands on EC2 instance
+      - name: Set permissions for PEM file
+        run: chmod 400 pdf-query-pro-backend-key-pair.pem
+
+      - name: Connect to EC2 and run commands
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@47.128.237.25 <<'EOF'
+          ssh -i "pdf-query-pro-backend-key-pair.pem" ec2-user@ec2-47-128-237-25.ap-southeast-1.compute.amazonaws.com << 'EOF'
             ls -ltr
-            git pull origin main
-            # Add any other commands you need to run on your EC2 instance
+            # Add more commands as needed
           EOF
   
