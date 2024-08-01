@@ -143,6 +143,7 @@ jobs:
             echo "" >> docker-compose.yml
             echo "services:" >> docker-compose.yml
             echo "  pdf-query-pro-backend:" >> docker-compose.yml
+            echo "  container_name: pdf_query_pro_backend_container" >> docker-compose.yml
             echo "    image: ${{ secrets.ECR_REGISTRY }}:latest" >> docker-compose.yml
             echo "    pull_policy: always" >> docker-compose.yml
             echo "    ports:" >> docker-compose.yml
@@ -168,6 +169,8 @@ jobs:
             docker-compose up -d
 
             docker ps
+
+            docker logs pdf_query_pro_backend_container
 
             # Add more commands as needed
           EOF
