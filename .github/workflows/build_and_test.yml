@@ -129,13 +129,10 @@ jobs:
 
       - name: Connect to EC2 and run commands
         run: |
-          ssh -o StrictHostKeyChecking=no -i "pdf-query-pro-backend-key-pair.pem" ec2-user@$ec2-user@ec2-47-128-237-25.ap-southeast-1.compute.amazonaws.com << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i "pdf-query-pro-backend-key-pair.pem" ec2-user@ec2-47-128-237-25.ap-southeast-1.compute.amazonaws.com << 'EOF'
             ls -ltr
-
-            aws ecr get-login-password --region ${{ vars.AWS_REGION_TEST }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
-
+            aws ecr get-login-password --region ${{vars.AWS_REGION_TEST}} | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
             docker-compose down
-
             docker-compose up
             # Add more commands as needed
           EOF
