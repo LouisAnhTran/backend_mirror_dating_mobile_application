@@ -6,7 +6,6 @@ on:
     branches:
       - main
 
-
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -27,6 +26,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       PINECONE_VECTOR_DIMENSION: ${{ vars.PINECONE_VECTOR_DIMENSION }}
       RDS_POSTGRESQL_PASSWORD: ${{ vars.RDS_POSTGRESQL_PASSWORD }}
+      WORKFLOW_IMAGE_NAME:  ${{ vars.WORKFLOW_IMAGE_NAME }}
       
     steps:
     - name: Checkout code
@@ -76,6 +76,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       PINECONE_VECTOR_DIMENSION: ${{ vars.PINECONE_VECTOR_DIMENSION }}
       RDS_POSTGRESQL_PASSWORD: ${{ vars.RDS_POSTGRESQL_PASSWORD }}
+      WORKFLOW_IMAGE_NAME:  ${{ vars.WORKFLOW_IMAGE_NAME }}
 
     steps:
     - name: Checkout code
@@ -108,8 +109,7 @@ jobs:
     - name: Build, tag, and push Docker image
       run: |
         docker-compose -f docker-compose.ci.yml build
-        # docker build -t pdf-query-pro-backend:latest .
-        docker tag pdf-query-pro-backend:latest ${{ secrets.ECR_REGISTRY }}:latest
+        docker tag ${{vars.WORKFLOW_IMAGE_NAME}}:latest ${{ secrets.ECR_REGISTRY }}:latest
         docker push ${{ secrets.ECR_REGISTRY }}:latest
         
   pull_image_and_deploy_in_ec2_instance:
@@ -118,15 +118,22 @@ jobs:
     if: success()
 
     steps:
-      - name: Deploy to EC2
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          API_KEY: ${{ secrets.API_KEY }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create PEM file
+        run: echo "${{ secrets.EC2_PEM_SECRET }}" > pdf-query-pro-backend-key-pair.pem
+
+      - name: Set permissions for PEM file
+        run: chmod 400 pdf-query-pro-backend-key-pair.pem
+
+      - name: Connect to EC2 and run commands
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            docker pull ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
-            docker stop my-fastapi-app || true
-            docker rm my-fastapi-app || true
-            docker run -d -p 80:80 --name my-fastapi-app -e DB_PASSWORD=${DB_PASSWORD} -e API_KEY=${API_KEY} ${{ secrets.ECR_REGISTRY }}/my-fastapi-app:latest
+          ssh -o StrictHostKeyChecking=no -i "pdf-query-pro-backend-key-pair.pem" ec2-user@ec2-47-128-237-25.ap-southeast-1.compute.amazonaws.com << 'EOF'
+            ls -ltr
+            aws ecr get-login-password --region ${{vars.AWS_REGION_TEST}} | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
+            docker-compose down
+            docker-compose up
+            # Add more commands as needed
           EOF
   
