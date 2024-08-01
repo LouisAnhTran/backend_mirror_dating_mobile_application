@@ -168,6 +168,8 @@ jobs:
             
             docker-compose up -d
 
+            sleep 20
+
             docker ps
 
             # Check if container is running
@@ -175,8 +177,6 @@ jobs:
               echo "Container is not running"
               exit 1
             fi
-
-            sleep 20
 
             docker logs pdf_query_pro_backend_container
 
