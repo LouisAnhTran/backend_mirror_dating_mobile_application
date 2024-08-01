@@ -150,7 +150,7 @@ jobs:
             echo "      - \"80:8000\"" >> docker-compose.yml
             echo "    environment:" >> docker-compose.yml
             echo "      - DATABASE_URL=${{ secrets.DATABASE_URL }}" >> docker-compose.yml
-            echo "      - PORT_PROD=${{ vars.PORT_PROD }}" >> docker-compose.yml
+            # echo "      - PORT_PROD=${{ vars.PORT_PROD }}" >> docker-compose.yml
             echo "      - PORT_DEV=${{ vars.PORT_DEV }}" >> docker-compose.yml
             echo "      - SECRET_KEY=${{ secrets.SECRET_KEY }}" >> docker-compose.yml
             echo "      - ALGORITHM=${{ secrets.ALGORITHM }}" >> docker-compose.yml
@@ -170,7 +170,11 @@ jobs:
 
             docker ps
 
-            sleep 10
+            # Check if container is running
+            if [ $(docker ps -q -f name=pdf_query_pro_backend_container | wc -l) -eq 0 ]; then
+              echo "Container is not running"
+              exit 1
+            fi
 
             docker logs pdf_query_pro_backend_container
 
