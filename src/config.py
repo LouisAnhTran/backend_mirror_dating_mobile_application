@@ -7,6 +7,7 @@ from src.utils.env_variable import convert_str_to_bool
 
 load_dotenv()
 
+print("HELLO_WORLD")
 
 for k,v in os.environ.items():
     print(f"env {k}: {v}")
