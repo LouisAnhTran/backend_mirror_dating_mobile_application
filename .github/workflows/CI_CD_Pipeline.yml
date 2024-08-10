@@ -140,11 +140,11 @@ jobs:
             
             aws ecr get-login-password --region ${{vars.AWS_REGION_TEST}} | docker login --username AWS --password-stdin ${{secrets.ECR_REGISTRY}}
 
-            docker-compose down
+            # docker-compose down
 
-            rm -f docker-compose.yml
+            # rm -f docker-compose.yml
 
-            docker image prune -a
+            # docker image prune -a
             
             # Create a new Docker Compose file using echo
             echo "version: '3.8'" > docker-compose.yml
