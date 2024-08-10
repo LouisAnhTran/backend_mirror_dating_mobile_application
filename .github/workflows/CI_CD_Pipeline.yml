@@ -144,6 +144,8 @@ jobs:
 
             rm -f docker-compose.yml
 
+            docker image prune -a
+            
             # Create a new Docker Compose file using echo
             echo "version: '3.8'" > docker-compose.yml
             echo "" >> docker-compose.yml
