@@ -275,6 +275,8 @@ async def retrieve_messages_from_pinecone(
             docname=doc_name
         )
 
+        logging.info("all_messages: ",all_messages)
+
         return {"data":all_messages}
 
     else:

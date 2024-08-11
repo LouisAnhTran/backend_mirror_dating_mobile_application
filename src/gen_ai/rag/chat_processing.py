@@ -113,6 +113,8 @@ async def generate_system_response(
 
     yield json.dumps({"last_token": final_response}) + "\n"
 
+    logging.info("test_date_time: ",datetime.now())
+
     await insert_entry_to_mesasages_table(
         username=username,
         message=final_response,
