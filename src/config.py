@@ -7,7 +7,7 @@ import json
 
 load_dotenv()
 
-LOCAL=bool(int(os.getenv("LOCAL")))
+LOCAL=bool(int(os.getenv("LOCAL","0")))
 PORT=os.getenv("PORT")
 SECRET_KEY = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = os.getenv("ALGORITHM")
