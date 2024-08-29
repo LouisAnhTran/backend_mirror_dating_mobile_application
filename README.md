@@ -20,9 +20,7 @@ Install the following tools and softwares to your local machine:
 
 + [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 
-
-### 2. Run Backend:
-Run the following commands to spin up backend
+### 2. Virtual Environment:
 
 + Install the dependencies listed in the pyproject.toml file and lock them in the poetry.lock file into your virtual environment.
 
@@ -35,6 +33,20 @@ poetry install
 ```
 poetry shell
 ```
+
+
+### 3. Database connection:
+
+1. Make db connection:
+Please refer to this [guide](https://github.com/LouisAnhTran/all-ai-platform-capstone-backend/blob/main/documentation/database_connection_guide.pdf)
+
+3. Connection test:
+Run this command to make sure the db connection is established correctly
+```
+poetry run python src/database/test_connection.py
+```
+
+### 3. Run Backend:
 
 + run the app
 
