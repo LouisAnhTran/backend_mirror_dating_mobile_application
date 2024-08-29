@@ -6,10 +6,12 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from src.config import DATABASE_URL
+# from src.config import DATABASE_URL
 from src.database.connection import get_connection
 
 LIST_OF_TABLES=['users','documents','messages',"all"]
+
+DATABASE_URL='postgresql://postgres:Capstone782425@all-ai-capstone-dev-test-db.c9iqe8mic0wy.ap-southeast-1.rds.amazonaws.com:5432/all_ai_capstone_dev_test_database'
 
 async def users_table():
     conn = await asyncpg.connect(DATABASE_URL)
