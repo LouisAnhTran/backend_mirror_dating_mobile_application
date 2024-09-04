@@ -6,12 +6,42 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-# from src.config import DATABASE_URL
+from src.config import DATABASE_URL
 from src.database.connection import get_connection
 
-LIST_OF_TABLES=['users','documents','messages',"all"]
+LIST_OF_TABLES=['users','documents','messages',"all","ai_tools"]
 
-DATABASE_URL='postgresql://postgres:Capstone782425@all-ai-capstone-dev-test-db.c9iqe8mic0wy.ap-southeast-1.rds.amazonaws.com:5432/all_ai_capstone_dev_test_database'
+async def ai_tools_table():
+    conn = await asyncpg.connect(DATABASE_URL)
+    try:
+        await conn.execute('''
+                DROP TABLE IF EXISTS ai_tools;
+        ''')
+        print("droped table ai_tools succesfully")
+    except Exception as e:
+        print("failed to drop ai_tools table")
+        return
+
+    try:
+        await conn.execute('''
+            CREATE TABLE IF NOT EXISTS ai_tools (
+                tool_name VARCHAR(100) NOT NULL UNIQUE,
+                tool_url VARCHAR(300) NOT NULL,
+                icon_url VARCHAR(300) NOT NULL,
+                category VARCHAR(100) NOT NULL,
+                description TEXT NOT NULL,
+                performance FLOAT4 NOT NULL,
+                popularity FLOAT4 NOT NULL,
+                security FLOAT4 NOT NULL,
+                ease_of_use FLOAT4 NOT NULL,
+                api_support BOOLEAN NOT NULL,
+                PRIMARY KEY (tool_name)
+            );
+
+        ''')
+        print("created table ai_tools successfully")
+    except Exception as e:
+        print("failed to drop table ai_tools")
 
 async def users_table():
     conn = await asyncpg.connect(DATABASE_URL)
@@ -142,4 +172,7 @@ if __name__ == "__main__":
 
     if sys.argv[1]=="messages":
         asyncio.run(messages_table())
+
+    if sys.argv[1]=="ai_tools":
+        asyncio.run(ai_tools_table())
 
