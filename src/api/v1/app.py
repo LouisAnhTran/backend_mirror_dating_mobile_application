@@ -24,7 +24,7 @@ from src.models.requests import (
     FetchChatMessagesRequest,
     ChatMessagesRequest)
 from src.utils.user_authentication import create_access_token
-from src.database.db_operations import (
+from database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
     retrieve_user_by_field_value,
     add_pdf_document_to_db,

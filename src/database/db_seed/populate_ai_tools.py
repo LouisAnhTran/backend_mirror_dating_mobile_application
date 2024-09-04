@@ -6,7 +6,7 @@ import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from src.database.connection import get_connection
+from database.db_connection.connection import get_connection
 from src.config import DATABASE_URL
 
 # Read the Excel file

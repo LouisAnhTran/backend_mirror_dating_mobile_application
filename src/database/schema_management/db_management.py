@@ -7,7 +7,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from src.config import DATABASE_URL
-from src.database.connection import get_connection
+from database.db_connection.connection import get_connection
 
 LIST_OF_TABLES=['users','documents','messages',"all","ai_tools"]
 
