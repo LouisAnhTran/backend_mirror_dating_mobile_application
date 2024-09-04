@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 import logging
 from fastapi import HTTPException
 
-load_dotenv()
+from src.config import DATABASE_URL
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+load_dotenv()
 
 async def get_connection():
     return await asyncpg.connect(DATABASE_URL)
