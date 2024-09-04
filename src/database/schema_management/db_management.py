@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 
 from src.database.db_connection.connection import get_connection
 
-LIST_OF_TABLES=['users','documents','messages',"all","ai_tools","ai_tools_bookmarks"]
+LIST_OF_TABLES=['ai_tools_bookmarks','messages','documents','ai_tools','users']
 
 async def ai_tools_table():
     conn=await get_connection()
@@ -87,8 +87,12 @@ async def ai_tools_bookmarks_table():
                 tool_name VARCHAR(100) NOT NULL UNIQUE,
                 email VARCHAR(100) NOT NULL UNIQUE,
 	            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                foreign key (email) references users(email),
-                foreign key (tool_name) references ai_tools(tool_name),
+                foreign key (email) references users(email)
+                    on delete cascade
+                    on update cascade,
+                foreign key (tool_name) references ai_tools(tool_name)
+                    on delete cascade
+                    on update cascade,
                 PRIMARY KEY (email,tool_name)
             );
 
@@ -118,7 +122,9 @@ async def documents_table():
                 no_of_pages INT NOT NULL,
                 doc_size FLOAT NOT NULL, 
 	            uploaded_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	            foreign key (email) references users(email),
+	            foreign key (email) references users(email)
+                    on delete cascade
+                    on update cascade,
 	            primary key (s3_dockey)
             );
 
@@ -147,7 +153,9 @@ async def messages_table():
                 role VARCHAR(50) NOT NULL,
                 content TEXT NOT NULL,
 	            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	            foreign key (email) references users(email),
+	            foreign key (email) references users(email)
+                    on delete cascade
+                    on update cascade,
 	            primary key (doc_name,email,timestamp)
             );
 
@@ -172,12 +180,14 @@ async def refresh_all():
     conn=await get_connection()
 
     try:
-        await drop_any_table("documents")
-        await drop_any_table("users")
-        await drop_any_table("messages")
+        for table in LIST_OF_TABLES:
+            await drop_any_table(table)
+
         await users_table()
+        await ai_tools_table()
         await documents_table()
         await messages_table()
+        await ai_tools_bookmarks_table()
     except Exception as E:
         print("error when refresh database")
 
@@ -189,8 +199,9 @@ if __name__ == "__main__":
         print("please provide table name")
         sys.exit(1)
 
-    if sys.argv[1] not in LIST_OF_TABLES:
-        print(f"please type in one of these table: {LIST_OF_TABLES}")
+    if sys.argv[1] not in LIST_OF_TABLES and sys.argv[1] != "all":
+        LIST_OF_TABLES.append("all")
+        print(f"please type in one of these table: {','.join(LIST_OF_TABLES)}")
         sys.exit(1)
     
     if sys.argv[1]=="all":
