@@ -43,7 +43,7 @@ Please refer to this [guide](https://github.com/LouisAnhTran/all-ai-platform-cap
 3. Connection test:
 Run this command to make sure the db connection is established correctly
 ```
-poetry run python src/database/test_connection.py
+poetry run python src/database/db_connection/test_connection.py
 ```
 
 ### 3. Run Backend:
