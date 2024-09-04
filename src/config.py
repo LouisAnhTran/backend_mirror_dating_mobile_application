@@ -8,7 +8,7 @@ import json
 load_dotenv()
 
 LOCAL=bool(int(os.getenv("LOCAL","0")))
-PORT=os.getenv("PORT")
+PORT=int(os.getenv("PORT"))
 SECRET_KEY = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRES_MINUTES"))
@@ -16,9 +16,10 @@ AWS_ACCESS_KEY=os.getenv("AWS_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY=os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_BUCKET_NAME_DEV=os.getenv("AWS_BUCKET_NAME_DEV")
 AWS_REGION=os.getenv("AWS_REGION_TEST")
-PINECONE_INDEX_PDF=os.getenv("PINECONE_INDEX")
+PINECONE_INDEX_PDF=os.getenv("PINECONE_INDEX_PDF")
 PINECONE_VECTOR_DIMENSION=os.getenv("PINECONE_VECTOR_DIMENSION")
 PINECONE_INDEX_ALL_AI=os.getenv("PINECONE_INDEX_ALL_AI")
+API_VERSION=os.getenv("API_VERSION")
 
 secret_name = "all-ai-capstone"
 region_name = "ap-southeast-1"

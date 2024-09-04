@@ -1,6 +1,3 @@
-from database.db_connection.connection import get_connection
-from src.models.requests import           (UserSignUpRequest,
-UserSignInRequest)
 import logging
 import uuid
 from fastapi import HTTPException
@@ -10,6 +7,10 @@ from datetime import datetime
 
 from src.utils.user_authentication import hash_password
 from src.utils.exceptions import return_error_param
+from src.database.db_connection.connection import get_connection
+from src.models.requests import (
+    UserSignUpRequest,
+    UserSignInRequest)
 
 async def add_user_to_users_table(user: UserSignUpRequest):
     conn=await get_connection()

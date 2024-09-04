@@ -17,7 +17,7 @@ from src.gen_ai.rag_pdf.prompt_template import (
 from src.models.requests import (
     SingleChatMessageRequest
 )
-from database.db_operation.pdf_query_pro.db_operations import (
+from src.database.db_operation.pdf_query_pro.db_operations import (
     insert_entry_to_mesasages_table
 )
 

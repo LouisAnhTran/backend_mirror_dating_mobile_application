@@ -9,11 +9,15 @@ import random
 import itertools
 from langchain_community.embeddings import AzureOpenAIEmbeddings
 from typing import Optional,Union
-load_dotenv()
 
-pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+from src.config import (
+    PINECONE_API_KEY,
+    PINECONE_INDEX_PDF
+)
 
-index = pc.Index(os.getenv("PINECONE_INDEX"))
+pc = Pinecone(api_key=PINECONE_API_KEY)
+
+index = pc.Index(PINECONE_INDEX_PDF)
 
 def query_by_username_dockey(
         username:str, 
