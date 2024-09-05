@@ -53,3 +53,11 @@ poetry run python src/database/db_connection/test_connection.py
 ```
 poetry run python main.py
 ```
+
+### 5. Test API:
+
++ access Swagger UI from your browser
+
+```
+phttp://loalhost:8000/docs
+```
