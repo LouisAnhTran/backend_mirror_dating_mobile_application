@@ -7,7 +7,15 @@ class UserSignUpRequest(BaseModel):
     username: str=Field(example="louis_anh_tran")
     email: str=Field(example="namanhtrancong@gmail.com")
     password: str=Field(example="12345678")
-    
+
+class UserOnboardingRequest(BaseModel):
+    username: str=Field(
+        example="Louis Anh Tran")
+    email_address: str=Field(
+        example="namanhtrancong@gmail.com")
+    industry: str=Field(
+        example="Information Technology"
+    )
 
 class UserSignInRequest(BaseModel):
     username: str=Field(example="louis_anh_tran")

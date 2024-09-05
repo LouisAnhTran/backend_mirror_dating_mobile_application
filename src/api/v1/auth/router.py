@@ -22,7 +22,8 @@ from src.models.requests import (
     UserSignUpRequest,
     UserSignInRequest,
     FetchChatMessagesRequest,
-    ChatMessagesRequest)
+    ChatMessagesRequest,
+    UserOnboardingRequest)
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
@@ -62,6 +63,10 @@ from src.gen_ai.rag_pdf.chat_processing import (
     generate_standalone_query,
     generate_system_response
 )
+from src.database.db_operation.onboarding.db_operations import (
+    onboard_new_user_to_db,
+    check_user_onboarding_status
+)
 
 api_router = APIRouter()
 
@@ -82,6 +87,34 @@ llm = AzureChatOpenAI(
 openaiembeddings=OpenAIEmbeddings(
     api_key=OPENAI_API_KEY
 )
+
+@api_router.get("/check_onboarding_status/{email_address}")
+async def check_onboarding_status_user(email_address: str):
+    logging.info("email address from client: ",email_address)
+    
+    time.sleep(4)
+
+    user=await check_user_onboarding_status(
+        email=email_address
+    )
+
+    logging.info("user: ",user)
+
+    result=False if not user else True
+
+    return {"status":result}
+
+@api_router.post("/onboard_user")
+async def onboard_new_user(request_body: UserOnboardingRequest):
+    logging.info(f"request_body: {request_body}")
+
+    await onboard_new_user_to_db(
+        user=request_body
+    )
+
+    time.sleep(6)
+
+    return {"message":"successfully onboarded"}
 
 @api_router.post("/user_signup")
 async def user_signup(request_body: UserSignUpRequest):
