@@ -59,5 +59,5 @@ poetry run python main.py
 + access Swagger UI from your browser
 
 ```
-phttp://loalhost:8000/docs
+http://loalhost:8000/docs
 ```
