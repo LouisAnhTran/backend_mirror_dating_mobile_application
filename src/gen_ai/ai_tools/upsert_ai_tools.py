@@ -20,6 +20,9 @@ index=pc.Index(PINECONE_INDEX_ALL_AI)
 
 embeddings_model = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
 
+# // remove all existing data first
+index.delete(delete_all=True)
+
 # Read the Excel file
 file_path = 'app_config/database_schema.xlsx'
 sheet_name = 'ai_tools_compile'

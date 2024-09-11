@@ -4,9 +4,9 @@ import asyncpg
 import asyncio
 import pandas as pd
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..','..')))
 
-from database.db_connection.connection import get_connection
+from src.database.db_connection.connection import get_connection
 from src.config import DATABASE_URL
 
 # Read the Excel file
