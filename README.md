@@ -46,10 +46,18 @@ Run this command to make sure the db connection is established correctly
 poetry run python src/database/db_connection/test_connection.py
 ```
 
-### 3. Run Backend:
+### 4. Run Backend:
 
 + run the app
 
 ```
 poetry run python main.py
+```
+
+### 5. Test API:
+
++ access Swagger UI from your browser
+
+```
+http://loalhost:8000/docs
 ```
