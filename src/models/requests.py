@@ -8,6 +8,13 @@ class UserSignUpRequest(BaseModel):
     email: str=Field(example="namanhtrancong@gmail.com")
     password: str=Field(example="12345678")
 
+class OTPRequest(BaseModel):
+    phone_number: str=Field(example="+6597755168")
+
+class OTPVerification(BaseModel):
+    phone_number: str=Field(example="+6597755168")
+    otp: str=Field(example="696969")
+
 class UserOnboardingRequest(BaseModel):
     username: str=Field(
         example="Louis Anh Tran")

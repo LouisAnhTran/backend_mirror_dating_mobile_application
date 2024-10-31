@@ -21,7 +21,7 @@ index=pc.Index(PINECONE_INDEX_ALL_AI)
 embeddings_model = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
 
 # // remove all existing data first
-index.delete(delete_all=True)
+# index.delete(delete_all=True)
 
 # Read the Excel file
 file_path = 'app_config/database_schema.xlsx'
@@ -41,6 +41,7 @@ vectors=[{"id":row['tool_name'],
             "security":row['security'],
             "ease_of_use":row['ease_of_use'],
             "api_support":row['api_support'],
+            "free": row['free']
           }
           } for _,row in df.iterrows()]
 

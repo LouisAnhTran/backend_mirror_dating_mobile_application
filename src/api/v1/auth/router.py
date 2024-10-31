@@ -16,6 +16,9 @@ from langchain_community.chat_models import AzureChatOpenAI
 from fastapi.responses import StreamingResponse
 from langchain_community.embeddings import AzureOpenAIEmbeddings
 from langchain.embeddings import OpenAIEmbeddings
+from pydantic import BaseModel
+import random
+from twilio.rest import Client
 
 
 from src.models.requests import (
@@ -23,7 +26,9 @@ from src.models.requests import (
     UserSignInRequest,
     FetchChatMessagesRequest,
     ChatMessagesRequest,
-    UserOnboardingRequest)
+    UserOnboardingRequest,
+    OTPRequest,
+    OTPVerification)
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
@@ -32,6 +37,10 @@ from src.database.db_operation.pdf_query_pro.db_operations import (
     retrieve_all_docs_user,
     insert_entry_to_mesasages_table,
     fetch_all_messages
+)
+from src.database.db_operation.user_auth.db_operations import (
+    add_mobile_phone_and_otp,
+    retrieve_otp_by_phone_number
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -47,7 +56,10 @@ from src.config import (
     AWS_REGION,
     GPT4_OPENAI_API_KEY,
     GTP4_OPENAI_API_BASE,
-    OPENAI_API_KEY
+    OPENAI_API_KEY,
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER
 )
 from src.utils.exceptions import return_error_param
 from src.gen_ai.rag_pdf.pinecone_operation import (
@@ -70,6 +82,12 @@ from src.database.db_operation.onboarding.db_operations import (
 
 api_router = APIRouter()
 
+# Twilio configuration
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+# In-memory OTP storage (consider using a database in production)
+otp_store = {}
+
 # init s3 client
 s3_client = boto3.client('s3', 
                          aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
@@ -88,11 +106,56 @@ openaiembeddings=OpenAIEmbeddings(
     api_key=OPENAI_API_KEY
 )
 
+
+@api_router.post("/generate-otp")
+async def generate_otp(request: OTPRequest):
+    # Generate a random 6-digit OTP
+    otp = f"{random.randint(100000, 999999)}"
+    
+    # Store OTP in memory with the associated phone number (use a database for production)
+    await add_mobile_phone_and_otp(request.phone_number,otp)
+    
+    time.sleep(3)
+
+
+    # Send OTP via Twilio
+    try:
+        message = client.messages.create(
+            body=f"Your verification code is {otp}",
+            from_=TWILIO_PHONE_NUMBER,
+            to=request.phone_number
+        )
+        return {"status": "OTP sent successfully"}
+    except Exception as e:
+        print(f"Twilio error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP") from e
+
+
+@api_router.post("/verify-otp")
+async def verify_otp(verification: OTPVerification):
+    stored_otp = await retrieve_otp_by_phone_number(verification.phone_number)
+    logging.info("stored_otp: ",stored_otp)
+
+    if not stored_otp:
+        raise HTTPException(status_code=404, detail="OTP not found or phone number is not valid")
+    
+    if stored_otp[0]['otp_code'] == verification.otp:
+        # Successful verification
+        return {"status": "Verification successful"}
+    raise HTTPException(status_code=400, detail="Invalid OTP")
+
+@api_router.get("/test_api_react_native")
+async def test_api_react_native():
+    
+    time.sleep(5)
+
+    return {"data":"successful"}
+
 @api_router.get("/check_onboarding_status/{email_address}")
 async def check_onboarding_status_user(email_address: str):
     logging.info("email address from client: ",email_address)
     
-    time.sleep(4)
+    time.sleep(2)
 
     user=await check_user_onboarding_status(
         email=email_address
@@ -112,7 +175,7 @@ async def onboard_new_user(request_body: UserOnboardingRequest):
         user=request_body
     )
 
-    time.sleep(6)
+    time.sleep(3)
 
     return {"message":"successfully onboarded"}
 

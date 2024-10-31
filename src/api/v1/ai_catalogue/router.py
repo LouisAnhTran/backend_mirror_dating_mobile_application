@@ -62,6 +62,9 @@ from src.gen_ai.rag_pdf.chat_processing import (
     generate_standalone_query,
     generate_system_response
 )
+from src.database.db_operation.ai_catalogue.db_operations import (
+    retrieve_some_ai_tools_for_all_catogories
+)
 
 api_router = APIRouter()
 
@@ -82,6 +85,22 @@ llm = AzureChatOpenAI(
 openaiembeddings=OpenAIEmbeddings(
     api_key=OPENAI_API_KEY
 )
+
+# ap endpoints
+@api_router.get("/get_all_al_tools/{category}")
+async def retrieve_some_ai_tools_for_all_categories(category: str):
+    logging.info("category: ",category)
+
+    time.sleep(4)
+
+    result=await retrieve_some_ai_tools_for_all_catogories(
+        number=6,
+        category=category
+    )
+
+
+    return {"data":result}
+    
 
 @api_router.post("/user_signup")
 async def user_signup(request_body: UserSignUpRequest):

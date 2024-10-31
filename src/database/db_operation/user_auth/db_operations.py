@@ -12,6 +12,39 @@ from src.models.requests import (
     UserSignUpRequest,
     UserSignInRequest)
 
+async def add_mobile_phone_and_otp(phone_number, otp_code):
+    conn=await get_connection()
+
+    try:
+        query = '''
+        INSERT INTO mobile_phone_otp_verification (phone_number, otp_code)
+            VALUES ($1, $2)
+            ON CONFLICT (phone_number) DO UPDATE SET otp_code = EXCLUDED.otp_code
+        '''
+
+        await conn.execute(query, phone_number, otp_code)
+        logging.info("Successfuly add phone number and otp to table")
+    except Exception as e:
+        logging.info("Failed to add phone number and otp to table: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def retrieve_otp_by_phone_number(phone_number):
+    conn=await get_connection()
+
+    try:
+        query = '''
+        select * from mobile_phone_otp_verification as mb
+        where mb.phone_number=$1;
+        '''
+
+        result=await conn.fetch(query, phone_number)
+        logging.info("Successfuly retrieve otp from phone number")
+
+        return result
+    except Exception as e:
+        logging.info("Failed to query otp code from phone number: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
 async def retrieve_some_ai_tools_for_all_catogories(
         number: int,
         category: str

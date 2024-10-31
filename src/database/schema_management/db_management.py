@@ -8,7 +8,32 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 
 from src.database.db_connection.connection import get_connection
 
-LIST_OF_TABLES=['ai_tools_bookmarks','messages','documents','ai_tools','users']
+LIST_OF_TABLES=['ai_tools_bookmarks','messages','documents','ai_tools','users','mobile_phone_otp_verification']
+
+async def mobile_phone_otp_verification_table(table_name: str):
+    conn=await get_connection()
+
+    try:
+        await conn.execute(f'''
+                DROP TABLE IF EXISTS {table_name} CASCADE;
+        ''')
+        print(f"droped table {table_name} succesfully")
+    except Exception as e:
+        print(f"failed to drop {table_name} table ",e)
+        return
+
+    try:
+        await conn.execute(f'''
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                id SERIAL PRIMARY KEY,
+                phone_number VARCHAR(100) NOT NULL UNIQUE,
+                otp_code VARCHAR(100) NOT NULL
+            );
+
+        ''')
+        print(f"created table {table_name} successfully")
+    except Exception as e:
+        print(f"failed to drop table {table_name} ",e)
 
 async def ai_tools_table():
     conn=await get_connection()
@@ -35,6 +60,7 @@ async def ai_tools_table():
                 security FLOAT4 NOT NULL,
                 ease_of_use FLOAT4 NOT NULL,
                 api_support BOOLEAN NOT NULL,
+                free BOOLEAN NOT NULL,
                 PRIMARY KEY (tool_name)
             );
 
@@ -221,4 +247,7 @@ if __name__ == "__main__":
 
     if sys.argv[1]=="ai_tools_bookmarks":
         asyncio.run(ai_tools_bookmarks_table())
+
+    if sys.argv[1]=="mobile_phone_otp_verification":
+        asyncio.run(mobile_phone_otp_verification_table(sys.argv[1]))
 
