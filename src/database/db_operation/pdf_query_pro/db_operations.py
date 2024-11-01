@@ -41,7 +41,7 @@ async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInR
         where u.{field_name}=$1;
         '''
 
-        result=await conn.fetch(query,user.username if field_name=="username" else user.email)
+        result=await conn.fetch(query,field_name)
 
         return result
     

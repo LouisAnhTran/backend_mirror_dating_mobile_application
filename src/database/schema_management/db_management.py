@@ -69,31 +69,32 @@ async def ai_tools_table():
     except Exception as e:
         print("failed to drop table ai_tools ",e)
 
-async def users_table():
+async def users_table(table_name: str):
     conn=await get_connection()
 
     try:
-        await conn.execute('''
-                DROP TABLE IF EXISTS users CASCADE;
+        await conn.execute(f'''
+                DROP TABLE IF EXISTS {table_name} CASCADE;
         ''')
-        print("droped table users succesfully")
+        print(f"droped table {table_name} succesfully")
     except Exception as e:
-        print("failed to drop users table ",e)
+        print(f"failed to drop {table_name} table ",e)
         return
 
     try:
-        await conn.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                username VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL UNIQUE,
-                industry VARCHAR(100) NOT NULL,
-                PRIMARY KEY (email)
+        await conn.execute(f'''
+            CREATE TABLE IF NOT EXISTS {table_name} (
+                username VARCHAR(100) NOT NULL unique,
+                phone_number VARCHAR(100) NOT NULL unique,
+                birthday VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                PRIMARY KEY (phone_number)
             );
 
         ''')
-        print("created users table successfully")
+        print(f"created {table_name} table successfully")
     except Exception as e:
-        print("failed to drop table users ",e)
+        print(f"failed to drop table {table_name} ",e)
 
 async def ai_tools_bookmarks_table():
     conn=await get_connection()
@@ -234,7 +235,7 @@ if __name__ == "__main__":
         asyncio.run(refresh_all())
 
     if sys.argv[1]=="users":
-        asyncio.run(users_table())
+        asyncio.run(users_table(sys.argv[1]))
 
     if sys.argv[1]=="documents":
         asyncio.run(documents_table())

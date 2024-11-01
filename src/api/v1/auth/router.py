@@ -32,7 +32,6 @@ from src.models.requests import (
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
-    retrieve_user_by_field_value,
     add_pdf_document_to_db,
     retrieve_all_docs_user,
     insert_entry_to_mesasages_table,
@@ -40,7 +39,9 @@ from src.database.db_operation.pdf_query_pro.db_operations import (
 )
 from src.database.db_operation.user_auth.db_operations import (
     add_mobile_phone_and_otp,
-    retrieve_otp_by_phone_number
+    retrieve_otp_by_phone_number,
+    insert_new_user,
+    retrieve_user_by_field_value
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -136,6 +137,8 @@ async def verify_otp(verification: OTPVerification):
     stored_otp = await retrieve_otp_by_phone_number(verification.phone_number)
     logging.info("stored_otp: ",stored_otp)
 
+    time.sleep(3)
+
     if not stored_otp:
         raise HTTPException(status_code=404, detail="OTP not found or phone number is not valid")
     
@@ -143,6 +146,7 @@ async def verify_otp(verification: OTPVerification):
         # Successful verification
         return {"status": "Verification successful"}
     raise HTTPException(status_code=400, detail="Invalid OTP")
+
 
 @api_router.get("/test_api_react_native")
 async def test_api_react_native():
@@ -185,7 +189,8 @@ async def user_signup(request_body: UserSignUpRequest):
 
     user_by_username=await retrieve_user_by_field_value(
         user=request_body,
-        field_name="username"
+        field_name="phone_number",
+        field_value=request_body.phonenumber
     )
 
     time.sleep(4)
@@ -193,22 +198,22 @@ async def user_signup(request_body: UserSignUpRequest):
     if user_by_username:
         raise HTTPException(
             status_code=403,
-            detail=f"User with username {request_body.username} already existed"
+            detail=f"User with phonenumber {request_body.phonenumber} already existed"
         )
     
-    user_by_email=await retrieve_user_by_field_value(
-        user=request_body,
-        field_name="email"
-    )
+    # user_by_email=await retrieve_user_by_field_value(
+    #     user=request_body,
+    #     field_name="email"
+    # )
         
-    if user_by_email:
-        raise HTTPException(
-            status_code=403,
-            detail=f"User with this email {request_body.email} already existed"
-        )
+    # if user_by_email:
+    #     raise HTTPException(
+    #         status_code=403,
+    #         detail=f"User with this email {request_body.email} already existed"
+    #     )
     
     
-    await add_user_to_users_table(
+    await insert_new_user(
         user=request_body
     )
     
@@ -230,14 +235,22 @@ async def login_for_access_token(request_body: UserSignInRequest ):
 
     user=await retrieve_user_by_field_value(
         user=request_body,
-        field_name="username"
+        field_name="username",
+        field_value=request_body.username
     )
 
     if not user:
-        raise HTTPException(
-            status_code=403,
-            detail=f"User with username {request_body.username} does not exist, please try again"
+        user=await retrieve_user_by_field_value(
+            user=request_body,
+            field_name="phone_number",
+            field_value=request_body.username
         )
+
+        if not user:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Username or phone number does not exist, please try again"
+            )
     
     user=user[0]
     if not  verify_password(

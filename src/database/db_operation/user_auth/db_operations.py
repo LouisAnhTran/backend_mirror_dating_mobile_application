@@ -28,6 +28,42 @@ async def add_mobile_phone_and_otp(phone_number, otp_code):
         logging.info("Failed to add phone number and otp to table: ",e.args[0])
         raise HTTPException(status_code=500,detail="server error")
 
+async def insert_new_user(user: UserSignUpRequest):
+    conn=await get_connection()
+
+    try:
+        query = '''
+        INSERT INTO users (username, phone_number, birthday, password)
+        VALUES ($1, $2, $3,$4)
+        '''
+
+        hashed_password=hash_password(
+            password=user.password
+        )
+    
+        await conn.execute(query, user.username, user.phonenumber, user.birthday, hashed_password)
+        logging.info("Successfuly add user to users table")
+    except Exception as e:
+        logging.info("Failed to add user to users table, error message: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInRequest],field_name,field_value):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select * from users as u
+        where u.{field_name}=$1;
+        '''
+
+        result=await conn.fetch(query,field_value)
+
+        return result
+    
+    except Exception as e:
+        logging.info(f"Failed to retrieve user by {field_name}: ",e.args)
+        raise HTTPException(status_code=500,detail="server error")
+
 async def retrieve_otp_by_phone_number(phone_number):
     conn=await get_connection()
 
@@ -98,22 +134,6 @@ async def add_user_to_users_table(user: UserSignUpRequest):
         raise HTTPException(status_code=500,detail="server error")
 
     
-async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInRequest],field_name):
-    conn=await get_connection()
-
-    try:
-        query=f'''
-        select * from users as u
-        where u.{field_name}=$1;
-        '''
-
-        result=await conn.fetch(query,user.username if field_name=="username" else user.email)
-
-        return result
-    
-    except Exception as e:
-        logging.info(f"Failed to retrieve user by {field_name}: ",e.args)
-        raise HTTPException(status_code=500,detail="server error")
 
 async def find_pdf_document_by_s3_dockey(
         s3_dockey: str
