@@ -12,107 +12,68 @@ from src.models.requests import (
     UserSignUpRequest,
     UserSignInRequest)
 
-async def add_mobile_phone_and_otp(phone_number, otp_code):
-    conn=await get_connection()
-
-    try:
-        query = '''
-        INSERT INTO mobile_phone_otp_verification (phone_number, otp_code)
-            VALUES ($1, $2)
-            ON CONFLICT (phone_number) DO UPDATE SET otp_code = EXCLUDED.otp_code
-        '''
-
-        await conn.execute(query, phone_number, otp_code)
-        logging.info("Successfuly add phone number and otp to table")
-    except Exception as e:
-        logging.info("Failed to add phone number and otp to table: ",e.args[0])
-        raise HTTPException(status_code=500,detail="server error")
-
-async def insert_new_user(user: UserSignUpRequest):
-    conn=await get_connection()
-
-    try:
-        query = '''
-        INSERT INTO users (username, phone_number, birthday, password, email, firstname, lastname)
-        VALUES ($1, $2, $3,$4,$5,$6,$7)
-        '''
-
-        hashed_password=hash_password(
-            password=user.password
-        )
-    
-        await conn.execute(query, user.username, user.phonenumber, user.birthday, hashed_password,user.email,user.firstname,user.lastname)
-        logging.info("Successfuly add user to users table")
-    except Exception as e:
-        logging.info("Failed to add user to users table, error message: ",e.args[0])
-        raise HTTPException(status_code=500,detail="server error")
-
-async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInRequest],field_name,field_value):
-    conn=await get_connection()
-
-    try:
-        query=f'''
-        select * from users as u
-        where u.{field_name}=$1;
-        '''
-
-        result=await conn.fetch(query,field_value)
-
-        return result
-    
-    except Exception as e:
-        logging.info(f"Failed to retrieve user by {field_name}: ",e.args)
-        raise HTTPException(status_code=500,detail="server error")
-
-async def retrieve_otp_by_phone_number(phone_number):
-    conn=await get_connection()
-
-    try:
-        query = '''
-        select * from mobile_phone_otp_verification as mb
-        where mb.phone_number=$1;
-        '''
-
-        result=await conn.fetch(query, phone_number)
-        logging.info("Successfuly retrieve otp from phone number")
-
-        return result
-    except Exception as e:
-        logging.info("Failed to query otp code from phone number: ",e.args[0])
-        raise HTTPException(status_code=500,detail="server error")
-
-async def retrieve_some_ai_tools_for_all_catogories(
-        number: int,
-        category: str
+async def insert_entry_to_sia_chats_table(
+        username: str,
+        content: str,
+        role: str, 
+        timestamp: datetime
 ):
     conn=await get_connection()
 
     try:
-        query = '''
-        WITH RankedItems AS (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (PARTITION BY at.category ORDER BY at.popularity DESC) AS rn
-        FROM
-            ai_tools as at
-        )
-        SELECT
-            *
-        FROM
-            RankedItems as ri
-        WHERE
-            rn <= $1
-            and category = $2;
+        query='''
+            insert into SaaChats (username,timestamp,content,role) values($1,$2,$3,$4)
         '''
 
- 
-        result=await conn.fetch(query, number,category)
-        logging.info("Successfuly add user to users table")
-
-        return result
+        await conn.execute(query, username, timestamp, content,role)
+        logging.info("Successfuly add message to sia chats table")
     except Exception as e:
-        logging.info("Failed retrieve_some_ai_tools_for_all_catogories: ",e)
+        logging.info("Failed to add message to sia chats table, error message: ",e.args[0])
         raise HTTPException(status_code=500,detail="server error")
+
+async def get_all_categories_by_username(
+        username: str,
+):
+    conn=await get_connection()
+
+    try:
+        query='''
+            select * 
+            from Categories as c
+            where c.username = $1;
+        '''
+
+        results=await conn.fetch(query, username)
+
+        logging.info("Successfuly retrieve all catefories for a user")
+
+        return results
+    except Exception as e:
+        logging.info("Failed to retrieve all catefories for a user, error message: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def get_category_by_username_and_id(
+        username: str,
+        category_id: int
+):
+    conn=await get_connection()
+
+    try:
+        query='''
+            select * 
+            from Categories as c
+            where c.username = $1 and c.category_id=$2;
+        '''
+
+        results=await conn.fetch(query, username, category_id)
+
+        logging.info("Successfuly retrieve all catefories for a user")
+
+        return results
+    except Exception as e:
+        logging.info("Failed to retrieve all catefories for a user, error message: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
 
 async def add_user_to_users_table(user: UserSignUpRequest):
     conn=await get_connection()
@@ -134,6 +95,22 @@ async def add_user_to_users_table(user: UserSignUpRequest):
         raise HTTPException(status_code=500,detail="server error")
 
     
+async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInRequest],field_name):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select * from users as u
+        where u.{field_name}=$1;
+        '''
+
+        result=await conn.fetch(query,field_name)
+
+        return result
+    
+    except Exception as e:
+        logging.info(f"Failed to retrieve user by {field_name}: ",e.args)
+        raise HTTPException(status_code=500,detail="server error")
 
 async def find_pdf_document_by_s3_dockey(
         s3_dockey: str

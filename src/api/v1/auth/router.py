@@ -28,7 +28,8 @@ from src.models.requests import (
     ChatMessagesRequest,
     UserOnboardingRequest,
     OTPRequest,
-    OTPVerification)
+    OTPVerification,
+    SignInByEmail)
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
@@ -115,6 +116,8 @@ async def generate_otp(request: OTPRequest):
     
     # Store OTP in memory with the associated phone number (use a database for production)
     await add_mobile_phone_and_otp(request.phone_number,otp)
+
+    logger.info("otp: ",request.phone_number)
     
     time.sleep(3)
 
@@ -130,6 +133,86 @@ async def generate_otp(request: OTPRequest):
     except Exception as e:
         print(f"Twilio error: {e}")
         raise HTTPException(status_code=500, detail="Failed to send OTP") from e
+
+@api_router.post("/sign-in-phone-number-generate-otp")
+async def generate_otp(request: OTPRequest):
+    # check if user already register
+    user_by_phone=await retrieve_user_by_field_value(
+        user=request,
+        field_name="phone_number",
+        field_value=request.phone_number
+    )
+
+    logging.info("user by phone: ",user_by_phone)
+
+    if not user_by_phone:
+        raise HTTPException(status_code=403, detail="This phonenumber is not registered, please sign up first") 
+
+    # Generate a random 6-digit OTP
+    otp = f"{random.randint(100000, 999999)}"
+    
+    # Store OTP in memory with the associated phone number (use a database for production)
+    await add_mobile_phone_and_otp(request.phone_number,otp)
+
+    logger.info("otp: ",request.phone_number)
+    
+    time.sleep(3)
+
+
+    # Send OTP via Twilio
+    try:
+        message = client.messages.create(
+            body=f"Your verification code is {otp}",
+            from_=TWILIO_PHONE_NUMBER,
+            to=request.phone_number
+        )
+        return {"status": "OTP sent successfully"}
+    except Exception as e:
+        print(f"Twilio error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP") from e
+
+@api_router.post("/sign-in-by-email")
+async def generate_otp(request_body: SignInByEmail):
+    time.sleep(4)
+
+    logging.info("request_body: ",request_body)
+
+    user=await retrieve_user_by_field_value(
+        user=request_body,
+        field_name="username",
+        field_value=request_body.email
+    )
+
+    if not user:
+        user=await retrieve_user_by_field_value(
+            user=request_body,
+            field_name="email",
+            field_value=request_body.email
+        )
+
+        if not user:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Username or phone number does not exist, please try again"
+            )
+    
+    user=user[0]
+    if not  verify_password(
+        plain_password=request_body.password,
+        hashed_password=user['password']
+        ):
+        raise HTTPException(
+            status_code=403,
+            detail="Password is not correct, please try again"
+        )
+    
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    access_token = create_access_token(
+        data={"sub": user['username']}, expires_delta=access_token_expires
+    )
+    
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @api_router.post("/verify-otp")
@@ -201,18 +284,7 @@ async def user_signup(request_body: UserSignUpRequest):
             detail=f"User with phonenumber {request_body.phonenumber} already existed"
         )
     
-    # user_by_email=await retrieve_user_by_field_value(
-    #     user=request_body,
-    #     field_name="email"
-    # )
-        
-    # if user_by_email:
-    #     raise HTTPException(
-    #         status_code=403,
-    #         detail=f"User with this email {request_body.email} already existed"
-    #     )
-    
-    
+
     await insert_new_user(
         user=request_body
     )
@@ -232,6 +304,8 @@ async def add_item(
 @api_router.post("/login")
 async def login_for_access_token(request_body: UserSignInRequest ):
     time.sleep(4)
+
+    logging.info("request_body: ",request_body)
 
     user=await retrieve_user_by_field_value(
         user=request_body,

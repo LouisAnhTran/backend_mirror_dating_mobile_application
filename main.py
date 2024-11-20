@@ -17,6 +17,7 @@ if API_VERSION=="1":
     from src.api.v1.pdf_query.router import api_router as api_router_pdf_query
     from src.api.v1.ai_benchmarking.router import api_router as api_router_ai_benchmarking
     from src.api.v1.ai_catalogue.router import api_router as api_router_ai_catalogue
+    from src.api.v1.sia_profile_creation.router import api_router as sia_profile_creation
 else:
     from src.api.v2.auth.router import api_router as api_router_auth
     from src.api.v2.pdf_query.router import api_router as api_router_pdf_query
@@ -40,6 +41,8 @@ app.include_router(api_router_auth, prefix=f"{PREFIX}auth")
 app.include_router(api_router_ai_catalogue,prefix=f"{PREFIX}ai_catalogue")
 app.include_router(api_router_ai_benchmarking,prefix=f"{PREFIX}ai_benchmarking")
 app.include_router(api_router_pdf_query,prefix=f"{PREFIX}pdf_query")
+app.include_router(sia_profile_creation,prefix=f"{PREFIX}sia_engine")
+
 
 
 if __name__ == "__main__":

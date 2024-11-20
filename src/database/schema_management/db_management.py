@@ -88,6 +88,9 @@ async def users_table(table_name: str):
                 phone_number VARCHAR(100) NOT NULL unique,
                 birthday VARCHAR(100) NOT NULL,
                 password VARCHAR(100) NOT NULL,
+                firstname VARCHAR(100) NOT NULL,
+                lastname VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
                 PRIMARY KEY (phone_number)
             );
 
