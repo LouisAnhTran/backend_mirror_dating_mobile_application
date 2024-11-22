@@ -16,19 +16,62 @@ async def insert_entry_to_sia_chats_table(
         username: str,
         content: str,
         role: str, 
-        timestamp: datetime
+        timestamp: datetime,
+        category_id: int
 ):
     conn=await get_connection()
 
     try:
         query='''
-            insert into SaaChats (username,timestamp,content,role) values($1,$2,$3,$4)
+            insert into SaaChats (username,timestamp,content,role,category_id) values($1,$2,$3,$4,$5)
         '''
 
-        await conn.execute(query, username, timestamp, content,role)
+        await conn.execute(query, username, timestamp, content,role,category_id)
         logging.info("Successfuly add message to sia chats table")
     except Exception as e:
         logging.info("Failed to add message to sia chats table, error message: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def add_subtopics_as_payload_to_categories_for_update_user_profile(
+        username: str,
+        category_id: int,
+        payload: str
+):
+    conn=await get_connection()
+
+    try:
+        query='''
+            UPDATE Categories
+            SET payload = $1
+            WHERE username = $2 AND category_id = $3;
+        '''
+
+        await conn.execute(query, payload,username,category_id)
+        logging.info("Successfuly update payload")
+    except Exception as e:
+        logging.info("Failed to update payload: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def get_all_chats_by_username(
+        username: str,
+):
+    conn=await get_connection()
+
+    try:
+        query='''
+            select * 
+            from SaaChats as s
+            where s.username = $1
+            order by s.timestamp desc;
+        '''
+
+        results=await conn.fetch(query, username)
+
+        logging.info("Successfuly retrieve all chats for a user")
+
+        return results
+    except Exception as e:
+        logging.info("Failed to retrieve all chats for a user, error message: ",e.args[0])
         raise HTTPException(status_code=500,detail="server error")
 
 async def get_all_categories_by_username(

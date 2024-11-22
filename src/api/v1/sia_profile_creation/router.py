@@ -22,6 +22,7 @@ from src.models.requests import (
     UserSignUpRequest,
     UserSignInRequest,
     FetchChatMessagesRequest,
+    SingleChatMessageRequest,
     ChatMessagesRequest)
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -33,7 +34,8 @@ from src.database.db_operation.pdf_query_pro.db_operations import (
     fetch_all_messages
 )
 from src.database.db_operation.sia_profile_creation.db_operations import (
-    insert_entry_to_sia_chats_table
+    insert_entry_to_sia_chats_table,
+    get_all_chats_by_username,
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -62,7 +64,9 @@ from src.gen_ai.sia_engine.chat_processing import (
     generate_standalone_query,
     generate_system_response,
     intent_detection,
-    extract_tag_sub_topics
+    extract_tag_sub_topics,
+    generate_saa_greetings_for_first_user_interaction,
+    generate_sia_question_to_continue_conversation
 )
 
 
@@ -85,66 +89,58 @@ openaiembeddings=OpenAIEmbeddings(
 
 
 
-@api_router.get("/fetch_messages/{doc_name}")
-async def retrieve_messages_from_pinecone(
-    doc_name: str,
+@api_router.get("/fetch_messages/{user_name}")
+async def retrieve_conversation_messages_and_start_conversation(
+    user_name: str,
     authorization: Optional[str] = Header(None)
     ):
-    logging.info("hello_in_fetch")
 
-    username='louis_anh_tran'
+    logging.info("user_name: ",user_name)
 
-    logging.info("username: ",username)
-
-    # check if we indexing for this document or not
-    result=query_by_username_dockey(
-        username=username,
-        doc_key=f"{username}/{doc_name}",
-        query="test",
-        top_k=1
+    all_chats_by_username=await get_all_chats_by_username(
+        username=user_name
     )
 
+    logging.info("all chats by username: ",all_chats_by_username)
 
-    logging.info("result_query_pinecone: ",result)
-
-    if result:
-        all_messages=await fetch_all_messages(
-            username=username,
-            docname=doc_name
+    # if there is no messages yet, this is the first time user interact with Saa
+    if not all_chats_by_username:
+        return await generate_saa_greetings_for_first_user_interaction(
+            llm=llm,
+            username=user_name
         )
+    
+    # or else user used to talk with saa before
+    # we just simply continue the conversation
+    user_latest_chat=all_chats_by_username[0]
 
-        logging.info("all_messages: ",all_messages)
-
-        return {"data":all_messages}
-
-    else:
-        # to do
-        logging.info("start_pinecone_indexing")
-        # retrieve pdf from aws
-        file_content= get_file(
-            s3_client=s3_client,
-            doc_key=f"{username}/{doc_name}"
-        )[0]
-
-        logging.info("file_content: ",file_content)
-
-        # run pinecone indexing pineline
-        try:
-            init_pinecone_and_doc_indexing(
-            username=username,
-            doc_key=f"{username}/{doc_name}",
-            file_bytes=file_content
+    # the latest user chat always has a role of Saa
+    if user_latest_chat['category_id']==0:
+        return await generate_saa_greetings_for_first_user_interaction(
+            llm=llm,
+            username=user_name
         )
-        except Exception as e:
-            raise HTTPException(status_code=500,
-                                detail="We encouter error when spinning up chat engine for this document")
-        
-    return {"data":[]}
+    
+    logging.info("category of last time conversation is: ",user_latest_chat['category_id'])
+
+    history_messages=[SingleChatMessageRequest(role=item['role'],
+                                               content=item['content'],
+                                               timestamp=item['timestamp'],
+                                               category_id=item['category_id']) for item in all_chats_by_username[:10]]
+
+    return await generate_sia_question_to_continue_conversation(
+        llm=llm,
+        username=user_name,
+        history_messages=history_messages,
+        category_id=user_latest_chat['category_id']
+    )
+    
+    
 
 @api_router.post("/generate_response/{user_name}")
-async def retrieve_messages_from_pinecone(
+async def saa_generate_question_or_response(
     user_name: str,
-    request_body: ChatMessagesRequest,
+    request_body: SingleChatMessageRequest,
     authorization: Optional[str] = Header(None)
     ):
 
@@ -152,8 +148,24 @@ async def retrieve_messages_from_pinecone(
 
     logging.info("user name: ",user_name)
 
-    user_query=request_body.list_of_messages[-1]
-    history_messages=request_body.list_of_messages[:-1]
+    user_query=request_body
+
+    if user_query.category_id==0:
+        return await generate_saa_greetings_for_first_user_interaction(
+            llm=llm,
+            username=user_name
+        )
+
+    all_chats_by_username=await get_all_chats_by_username(
+        username=user_name
+    )
+
+    history_messages=[SingleChatMessageRequest(role=item['role'],
+                                               content=item['content'],
+                                               timestamp=item['timestamp'],
+                                               category_id=item['category_id']) for item in all_chats_by_username[1:10]]
+    
+    logging.info("history_messages: ",history_messages)
 
     # intent detection
     intent_detected=intent_detection(
@@ -163,45 +175,49 @@ async def retrieve_messages_from_pinecone(
 
     logging.info("Intent detected: ",intent_detected)
 
-    
-    # subtopic, and tags extracted
-    if request_body.category_id:
-        await extract_tag_sub_topics(
-            llm=llm,
-            user_latest_response=user_query.content,
-            category_id=request_body.category_id,
-            user_name=user_name
-        )
+    if intent_detected=="'continue_conversation'":
+        logging.info("go inside continue conversation")
+
+        # subtopic, and tags extracted
+        if user_query.category_id:
+            await extract_tag_sub_topics(
+                llm=llm,
+                user_latest_response=user_query.content,
+                category_id=user_query.category_id,
+                user_name=user_name
+            )
 
 
-    await insert_entry_to_sia_chats_table(
-        username=user_name,
-        timestamp=user_query.timestamp,
-        role="user",
-        content=user_query.content
-    )
-
-    logging.info("user_query: ",user_query)
-    logging.info("history_messages: ",history_messages)
-
-    if not history_messages:
-        standalone_query=user_query.content
-    else:
-        standalone_query=generate_standalone_query(
-            llm=llm,
-            user_query=user_query,
-            history_messages=history_messages
-        )
-
-    logging.info("pass this stage")
-
-    return await generate_system_response(
-            llm=llm,
-            openai_embeddings=openaiembeddings,
-            standalone_query=standalone_query,
+        await insert_entry_to_sia_chats_table(
             username=user_name,
-            history_messages=history_messages, 
+            timestamp=user_query.timestamp,
+            role="user",
+            content=user_query.content,
+            category_id=user_query.category_id
         )
+
+
+        if not history_messages:
+            standalone_query=user_query.content
+        else:
+            standalone_query=generate_standalone_query(
+                llm=llm,
+                user_query=user_query,
+                history_messages=history_messages
+            )
+
+        logging.info("pass this stage")
+
+        return await generate_system_response(
+                llm=llm,
+                openai_embeddings=openaiembeddings,
+                standalone_query=standalone_query,
+                username=user_name,
+                history_messages=history_messages, 
+                category_id=user_query.category_id
+            )
+    
+    
 
   
         
