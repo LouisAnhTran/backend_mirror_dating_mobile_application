@@ -5,6 +5,7 @@ CREATE TABLE SaaChats (
     timestamp TIMESTAMP NOT NULL,
     content TEXT NOT NULL,
     role VARCHAR(50) NOT NULL,
+	category_id int NOT NULL,
     PRIMARY KEY (username, timestamp),
 	FOREIGN KEY (username) REFERENCES users(username)
 );
@@ -43,5 +44,17 @@ select * from SaaChats;
 select * 
 from Categories as c
 where c.username = 'louis';
+
+select *
+from SaaChats as s
+where s.username='louis';
+
+select * 
+from users;
+
+INSERT INTO users (username, phone_number, birthday, password, firstname, lastname, email)
+VALUES ('louisanhtran', '+65 1234 5679', '01/01/1998', '$2b$12$2bpfGkk63eDGQcfOkGUSMOpfpPEtOObF70qEdrmY02SSYZuXpk2Mk', 'Anh', 'Tran', 'louistran@gmail.com');
+
+
 
 

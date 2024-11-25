@@ -27,7 +27,8 @@ from src.gen_ai.sia_engine.prompt_template import (
     CONDENSE_HISTORY_TO_STANDALONE_QUERY_TEMPLATE,
     INTENT_DETECTION,
     EXTRACT_SUBTOPICS_AND_TAGS,
-    SAA_GENERATE_FIRST_QUESTION
+    SAA_GENERATE_FIRST_QUESTION,
+    SAA_GENERATE_QUESTION_MOVE_TO_NEXT_TOPIC
 )
 from src.gen_ai.sia_engine.constant import (
     INTENT
@@ -134,6 +135,8 @@ async def generate_system_response(
         sub_topics=sub_topics_for_prompt_templates
     )
 
+    logging.info("is_sufficient_infomation: ",sufficient_info)
+
 
     # for category in all_categories:
     #     sub_topics=json.loads(category['payload'])
@@ -195,7 +198,7 @@ async def generate_system_response(
         category_id=category_to_generate_question_for['category_id']
     )
 
-    return {"data":response['text']}
+    return {"data":response['text'],"category_id":category_to_generate_question_for['category_id']}
 
 async def extract_tag_sub_topics(
     llm: AzureChatOpenAI,
@@ -308,7 +311,7 @@ async def generate_saa_greetings_for_first_user_interaction(
         category_id=category_to_generate_question_for['category_id']
     )
 
-    return {"data":response['text']}
+    return {"data":response['text'],"category_id":1}
 
 
 async def generate_sia_question_to_continue_conversation(
@@ -395,4 +398,97 @@ async def generate_sia_question_to_continue_conversation(
         category_id=category_to_generate_question_for['category_id']
     )
 
-    return response['text']
+    return {"data":response['text'],"category_id":category_to_generate_question_for['category_id']}
+
+
+async def generate_system_response_switch_to_new_topic(
+        llm: AzureChatOpenAI,
+        username: str,
+        category_id: int
+):
+    logging.info("pass this stage 1 ")
+
+    all_categories= await get_all_categories_by_username(
+        username=username
+    )
+
+    logging.info("all categories: ",all_categories)
+
+    def is_valid_sub_topics(sub_topics: dict):
+        if not sub_topics:
+            return False
+        
+        if len(sub_topics['subtopics'])<2:
+            return False
+        
+        for sub_topic in sub_topics['subtopics']:
+            if len(sub_topic['tags'])<2:
+                return False
+        
+        return True
+    
+    category_to_generate_question_for=[cate for cate in all_categories if cate['category_id']==category_id][0]
+
+    logging.info("category_to_generate_question_for: ",category_to_generate_question_for)
+    sub_topics_for_prompt_templates=json.loads(category_to_generate_question_for['payload'])
+    sufficient_info=is_valid_sub_topics(
+        sub_topics=sub_topics_for_prompt_templates
+    )
+
+
+    # for category in all_categories:
+    #     sub_topics=json.loads(category['payload'])
+    #     if not valid_sub_topics(
+    #         sub_topics=sub_topics):
+    #         logging.info("need to generate question for ",category['category_name'])
+    #         category_to_generate_question_for=category
+    #         sub_topics_for_prompt_templates=sub_topics
+    #         break
+
+    desired_format='''
+    {"sub_topics":[
+        {
+            "titles": "watching movies",
+            "interest_Score": 9, 
+            "tags": ["spider man, marvel, horror movies"],
+            "explaination": "user seems to be really into watching movies, specially spider man, marverl and horror movies, indicating he is adventerous,....' 
+        },
+        {
+            "titles": "play sport",
+            "interest_Score": 9, 
+            "tags": ["football, liverpool, premimier league"],
+            "explaination": "user has an absolute passion for football and he has been watching EPL games and he has been Liverpool fan for 10 years, he also spend much time to play football. So he is sporty, caring about this appearance, fitness, loyal,...' 
+        }
+    ]}
+    '''
+
+
+    chat_template = PromptTemplate.from_template(SAA_GENERATE_QUESTION_MOVE_TO_NEXT_TOPIC)
+
+    chain = LLMChain(llm=llm, prompt=chat_template)
+
+    response = chain(
+        {
+            "category": category_to_generate_question_for['category_name'],
+            "category_description": category_to_generate_question_for['category_description'],
+            "desired_final_format": desired_format,
+            "current_information": sub_topics_for_prompt_templates,
+            "is_sufficient_info": sufficient_info,
+            "is_continue_conversation": False
+        },
+        return_only_outputs=True
+    )
+
+    logging.info("llm question: ",response['text'])
+
+
+    # // store llm response to db
+    await insert_entry_to_sia_chats_table(
+        username=username,
+        timestamp=datetime.now(),
+        role="saa",
+        content=response['text'],
+        category_id=category_to_generate_question_for['category_id']
+    )
+
+    return {"data":response['text'],"category_id":category_id}

@@ -66,7 +66,8 @@ from src.gen_ai.sia_engine.chat_processing import (
     intent_detection,
     extract_tag_sub_topics,
     generate_saa_greetings_for_first_user_interaction,
-    generate_sia_question_to_continue_conversation
+    generate_sia_question_to_continue_conversation,
+    generate_system_response_switch_to_new_topic
 )
 
 
@@ -175,7 +176,7 @@ async def saa_generate_question_or_response(
 
     logging.info("Intent detected: ",intent_detected)
 
-    if intent_detected=="'continue_conversation'":
+    if intent_detected=="continue_conversation" or intent_detected=="greetings":
         logging.info("go inside continue conversation")
 
         # subtopic, and tags extracted
@@ -216,6 +217,14 @@ async def saa_generate_question_or_response(
                 history_messages=history_messages, 
                 category_id=user_query.category_id
             )
+    
+    if intent_detected=="move_to_next_category":
+         return await generate_system_response_switch_to_new_topic(
+                llm=llm,
+                username=user_name,
+                category_id=user_query.category_id+1
+            )
+
     
     
 
