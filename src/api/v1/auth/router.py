@@ -29,7 +29,11 @@ from src.models.requests import (
     UserOnboardingRequest,
     OTPRequest,
     OTPVerification,
-    SignInByEmail)
+    SignInByEmail,
+    LoadSaaConversationRequest,
+    GetSaaFollowUpOrIntroRequest,
+    GetSaaResponseRequest
+    )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
     add_user_to_users_table, 
@@ -42,7 +46,8 @@ from src.database.db_operation.user_auth.db_operations import (
     add_mobile_phone_and_otp,
     retrieve_otp_by_phone_number,
     insert_new_user,
-    retrieve_user_by_field_value
+    retrieve_user_by_field_value,
+    retrieve_saa_history_chat
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -50,6 +55,11 @@ from src.utils.user_authentication import (
     get_access_token_cookie,
     decode_access_token
     )
+from src.gen_ai.sia_engine.chat_processing import (
+    generate_saa_follow_up_question,
+    generate_saa_intro,
+    generate_saa_response
+)
 from src.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     AWS_ACCESS_KEY,
@@ -76,10 +86,6 @@ from src.gen_ai.rag_pdf.doc_processing import (
 from src.gen_ai.rag_pdf.chat_processing import (
     generate_standalone_query,
     generate_system_response
-)
-from src.database.db_operation.onboarding.db_operations import (
-    onboard_new_user_to_db,
-    check_user_onboarding_status
 )
 
 api_router = APIRouter()
@@ -121,10 +127,9 @@ async def generate_otp(request: OTPRequest):
     
     time.sleep(3)
 
-
     # Send OTP via Twilio
     try:
-        message = client.messages.create(
+        client.messages.create(
             body=f"Your verification code is {otp}",
             from_=TWILIO_PHONE_NUMBER,
             to=request.phone_number
@@ -238,34 +243,6 @@ async def test_api_react_native():
 
     return {"data":"successful"}
 
-@api_router.get("/check_onboarding_status/{email_address}")
-async def check_onboarding_status_user(email_address: str):
-    logging.info("email address from client: ",email_address)
-    
-    time.sleep(2)
-
-    user=await check_user_onboarding_status(
-        email=email_address
-    )
-
-    logging.info("user: ",user)
-
-    result=False if not user else True
-
-    return {"status":result}
-
-@api_router.post("/onboard_user")
-async def onboard_new_user(request_body: UserOnboardingRequest):
-    logging.info(f"request_body: {request_body}")
-
-    await onboard_new_user_to_db(
-        user=request_body
-    )
-
-    time.sleep(3)
-
-    return {"message":"successfully onboarded"}
-
 @api_router.post("/user_signup")
 async def user_signup(request_body: UserSignUpRequest):
     logging.info("request_body: ",request_body)
@@ -291,16 +268,7 @@ async def user_signup(request_body: UserSignUpRequest):
     
     return {"message": "User registered successfully"}
 
-@api_router.post("/add-item")
-async def add_item(
-    item: dict,  # Replace with your actual item model or schema
-    access_token: str = Depends(get_access_token_cookie)
-):
-    
-    return {"message": "success"}
 
-
-    
 @api_router.post("/login")
 async def login_for_access_token(request_body: UserSignInRequest ):
     time.sleep(4)
@@ -344,82 +312,76 @@ async def login_for_access_token(request_body: UserSignInRequest ):
     
     return {"access_token": access_token, "token_type": "bearer"}
 
-@api_router.post("/uploadfile")
-async def upload_file(request: Request,
-                      file: UploadFile = File(...),
-       authorization: Optional[str] = Header(None)
-    ):
-
-    logging.info("authorization: ",authorization)
-
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid or missing Authorization token")
-
-    access_token = authorization.split("Bearer ")[1]
-    logging.info("Access token: %s", access_token)
-
-    if access_token is None:
-        raise HTTPException(status_code=401, detail="Access token is missing")
-
-    # Verify the token and get the username
-    username = decode_access_token(access_token)
-
+@api_router.get("/load_saa_conversation/{username}")
+async def load_conversation_saa_user_profile_creation(username: str):
     logging.info("username: ",username)
+
+    time.sleep(4)
+
+    # check if prior conversation exists
+    history_messages=await retrieve_saa_history_chat(
+        username=username
+    )
+
+    logging.info("history_message ",history_messages)
+
+    # return a list of all messages to
+    return {"response":history_messages}
+
+
+@api_router.post("/get_saa_intro_or_follow_up")
+async def get_saa_intro_or_follow_up(request: GetSaaFollowUpOrIntroRequest):
+    logging.info("username: ",request.username)
+
+    # check if prior conversation exists
+    history_messages=await retrieve_saa_history_chat(
+        username=request.username
+    )
+
+    time.sleep(5)
+
+    logging.info("history_message ",history_messages)
+
+    if len(history_messages):
+        # ask Saa service to generate follow up question
+        # return StreamingResponse(
+        #     generate_saa_follow_up_question(
+        #         username=request.username
+        #     ), 
+        #     media_type="text/event-stream")
+        return {"response":await generate_saa_follow_up_question(
+            username=request.username
+        )}
     
-    folder_name=f"{username}/"
+    # return StreamingResponse(
+    #     generate_saa_intro(
+    #         username=request.username
+    #     ), 
+    #     media_type="text/event-stream")
+    return {"response":await generate_saa_intro(
+        username=request.username
+    )}
 
-    # check if file is valid
-    if file.content_type != "application/pdf":
-        raise HTTPException(status_code=400, detail={"File must be a PDF"})
+@api_router.post("/get_saa_response")
+async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
+    logging.info("username: ",request.username)
+    logging.info("user query: ",request.userinput)
 
-    try:
-        # Read file content
-        file_content = await file.read()
+    time.sleep(5)
 
-        # Open the PDF file using PyMuPDF from the in-memory bytes
-        pdf_document = fitz.open(stream=BytesIO(file_content), filetype="pdf")
-        
-        # Get the number of pages
-        num_pages = pdf_document.page_count
+    return {"response": await generate_saa_response(
+        username=request.username,
+        userquery=request.userinput
+    )}
 
-        logging.info("num_pages: ",num_pages)
-        
-        # Get the file size
-        file_size = len(file_content)
+    # return StreamingResponse(
+    #     generate_saa_response(
+    #         username=request.username,
+    #         userquery=request.userinput
+    #     ), 
+    #     media_type="text/event-stream")
 
-        logging.info("file_size: ",file_size)
 
-        s3_dockey=f"{folder_name}{file.filename}"
-
-         # insert document entry to db
-        await add_pdf_document_to_db(
-            s3_dockey=s3_dockey,
-            username=username,
-            filename=file.filename,
-            pages=num_pages,
-            file_size=file_size
-        )
-
-        logging.info("pass_this_stage")
-
-        # Upload file to S3
-        s3_client.put_object(
-            Bucket=AWS_BUCKET_NAME_DEV,
-            Key=s3_dockey,
-            Body=file_content,
-            ContentType=file.content_type
-        )
-
-        return {"message": "File uploaded successfully", "filename": file.filename}
-    except NoCredentialsError:
-        raise HTTPException(status_code=403, detail="AWS credentials not found")
-    except PartialCredentialsError:
-        raise HTTPException(status_code=403, detail="Incomplete AWS credentials")
-    except Exception as e:
-        raise HTTPException(
-            status_code=return_error_param(e,"status_code"), 
-            detail=return_error_param(e,"detail"))
-    
 
 @api_router.get("/fetch_messages/{doc_name}")
 async def retrieve_messages_from_pinecone(
@@ -591,82 +553,3 @@ async def retrieve_messages_from_pinecone(
                                 detail="We encouter error when spinning up chat engine for this document")
         
     return {"data":"okie"}
-
-
-# Example endpoint to fetch and return a PDF from S3
-@api_router.get("/get-pdf/{file_name}")
-def get_pdf(file_name: str, authorization: Optional[str] = Header(None)):
-    
-    logging.info("authorization: ",authorization)
-
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid or missing Authorization token")
-
-    access_token = authorization.split("Bearer ")[1]
-
-    logging.info("Access token: %s", access_token)
-
-    if access_token is None:
-        raise HTTPException(status_code=401, detail="Access token is missing")
-
-    # Verify the token and get the username
-    username = decode_access_token(access_token)
-
-    logging.info("username: ",username)
-
-    url=f"https://{AWS_BUCKET_NAME_DEV}.s3.{AWS_REGION_TEST}.amazonaws.com/{username}/{file_name}"
-
-    return {"data":url}
-
-    # # Download file from S3
-    # response = s3_client.get_object(
-    #         Bucket=AWS_BUCKET_NAME_DEV,
-    #         Key=f"{username}/{file_name}"
-    #     )
-
-    
-    # pdf_content = response['Body'].read()
-        
-    # # Return PDF content as a streaming response
-    # return StreamingResponse(
-    #         io.BytesIO(pdf_content),
-    #         media_type="application/pdf",
-    #         headers={"Content-Disposition": f"attachment; filename={file_name}"}
-    # )
-
-
-
-# Example endpoint to fetch and return a PDF from S3
-@api_router.get("/all_docs")
-async def get_all_documents_user(authorization: Optional[str] = Header(None)):
-    
-    logging.info("authorization: ",authorization)
-
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Invalid or missing Authorization token")
-
-    access_token = authorization.split("Bearer ")[1]
-
-    logging.info("Access token: %s", access_token)
-
-    if access_token is None:
-        raise HTTPException(status_code=401, detail="Access token is missing")
-
-    # Verify the token and get the username
-    username = decode_access_token(access_token)
-
-    logging.info("username: ",username)
-
-    result=await retrieve_all_docs_user(
-        username=username
-    )
-
-    time.sleep(4)
-
-
-    logging.info("result ",result)
-
-    
-    return {"data":result,"message":"Fetched all files successfully"}
-
-

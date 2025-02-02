@@ -24,6 +24,15 @@ class UserSignUpRequest(BaseModel):
         example="louisanhtran@gmail.com"
     )
 
+class LoadSaaConversationRequest(BaseModel):
+    username: str=Field(example='louis')
+
+class GetSaaFollowUpOrIntroRequest(BaseModel):
+    username: str=Field(example='louis')
+
+class GetSaaResponseRequest(BaseModel):
+    username: str=Field(example='louis')
+    userinput: str=Field(example='I enjoy playing sports in my freetime')
 
 class OTPRequest(BaseModel):
     phone_number: str=Field(example="+6597755168")

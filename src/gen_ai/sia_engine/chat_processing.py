@@ -8,7 +8,7 @@ from langchain.chains import LLMChain
 from langchain_community.embeddings import AzureOpenAIEmbeddings
 from langchain_community.chat_models import AzureChatOpenAI
 from datetime import datetime
-
+import asyncio
 from src.gen_ai.rag_pdf.pinecone_operation import query_by_username_dockey
 from src.models.requests import (
     SingleChatMessageRequest
@@ -97,6 +97,59 @@ def intent_detection(
     logging.info("intent detected: ",response['text'])
 
     return response['text']
+
+async def generate_saa_follow_up_question(
+    username: str
+):
+    logging.info("username: ",username)
+    # placeholder first
+    # call Saa service api
+    result="welcome back to our conversation, last time we talked about hobbies and interest, let continue this conversation, what do you do in your free time"
+
+    return result
+
+    # final_response=""
+    # for chunk in result.split():
+    #     final_response+=" "+chunk
+    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
+
+    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
+    
+async def generate_saa_intro(
+    username: str
+):
+    logging.info("username: ",username)
+    # placeholder first
+    # call Saa service api
+    result=f"Hey {username}, I am Saa, I am here to help you explore and understand yourself deeply to find the most ideal matches, to do that I would like to learn more about you and the first topic i wanna talk about is Hobbies and interest, what do you do in your free time ?"
+
+    # final_response=""
+    # for chunk in result.split():
+    #     final_response+=" "+chunk
+    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
+
+    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
+
+    return result
+
+
+async def generate_saa_response(
+    username: str,
+    userquery: str
+):
+    logging.info("username: ",username)
+    # call Saa service api
+    result=f"It seems you are embracing an healthy and positive lifestyle, I would like to learn more about your hobbies and interest by asking how much do you often spend on reading habit and what are some of reading topics that you are interested in ?"
+
+    return result
+
+    # final_response=""
+    # for chunk in result.split():
+    #     final_response+=" "+chunk
+    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
+
+    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
+
 
 async def generate_system_response(
         llm: AzureChatOpenAI,
