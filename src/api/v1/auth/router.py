@@ -343,24 +343,16 @@ async def get_saa_intro_or_follow_up(request: GetSaaFollowUpOrIntroRequest):
     logging.info("history_message ",history_messages)
 
     if len(history_messages):
-        # ask Saa service to generate follow up question
-        # return StreamingResponse(
-        #     generate_saa_follow_up_question(
-        #         username=request.username
-        #     ), 
-        #     media_type="text/event-stream")
-        return {"response":await generate_saa_follow_up_question(
+        saa_follow_up= await generate_saa_follow_up_question(
             username=request.username
-        )}
-    
-    # return StreamingResponse(
-    #     generate_saa_intro(
-    #         username=request.username
-    #     ), 
-    #     media_type="text/event-stream")
-    return {"response":await generate_saa_intro(
+        )
+        return {"response": saa_follow_up['body']}
+        
+    saa_intro=await generate_saa_intro(
         username=request.username
-    )}
+    )
+
+    return {"response":saa_intro['body']}
 
 @api_router.post("/get_saa_response")
 async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
@@ -368,20 +360,13 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
     logging.info("user query: ",request.userinput)
 
     time.sleep(5)
-
-    return {"response": await generate_saa_response(
+    
+    saa_response=await generate_saa_response(
         username=request.username,
         userquery=request.userinput
-    )}
+    )
 
-    # return StreamingResponse(
-    #     generate_saa_response(
-    #         username=request.username,
-    #         userquery=request.userinput
-    #     ), 
-    #     media_type="text/event-stream")
-
-
+    return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
 
 @api_router.get("/fetch_messages/{doc_name}")
 async def retrieve_messages_from_pinecone(

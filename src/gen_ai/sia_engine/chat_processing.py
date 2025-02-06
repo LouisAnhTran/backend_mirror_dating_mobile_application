@@ -1,6 +1,7 @@
 
 from typing import List
 import json
+import httpx
 import logging
 from langchain.memory import ChatMessageHistory
 from langchain_core.prompts import PromptTemplate
@@ -16,6 +17,7 @@ from src.models.requests import (
 from src.database.db_operation.pdf_query_pro.db_operations import (
     insert_entry_to_mesasages_table
 )
+from fastapi import FastAPI,HTTPException
 from src.database.db_operation.sia_profile_creation.db_operations import (
     get_all_categories_by_username,
     insert_entry_to_sia_chats_table,
@@ -32,6 +34,9 @@ from src.gen_ai.sia_engine.prompt_template import (
 )
 from src.gen_ai.sia_engine.constant import (
     INTENT
+)
+from src.config import (
+    SAA_SERVICE_URL
 )
 
 def format_chat_history(chat_history: List[SingleChatMessageRequest]) -> ChatMessageHistory:
@@ -102,35 +107,36 @@ async def generate_saa_follow_up_question(
     username: str
 ):
     logging.info("username: ",username)
-    # placeholder first
-    # call Saa service api
-    result="welcome back to our conversation, last time we talked about hobbies and interest, let continue this conversation, what do you do in your free time"
+    
+    payload = {"username": username}
 
-    return result
-
-    # final_response=""
-    # for chunk in result.split():
-    #     final_response+=" "+chunk
-    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
-
-    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(SAA_SERVICE_URL+'get_saa_follow_up_question', json=payload)
+            response.raise_for_status()
+            print("saa_follow_up: ",response.json())
+            return response.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
+    
     
 async def generate_saa_intro(
     username: str
 ):
     logging.info("username: ",username)
-    # placeholder first
-    # call Saa service api
-    result=f"Hey {username}, I am Saa, I am here to help you explore and understand yourself deeply to find the most ideal matches, to do that I would like to learn more about you and the first topic i wanna talk about is Hobbies and interest, what do you do in your free time ?"
+    
+    payload = {"username": username}
 
-    # final_response=""
-    # for chunk in result.split():
-    #     final_response+=" "+chunk
-    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(SAA_SERVICE_URL+'get_saa_intro', json=payload)
+            response.raise_for_status()
+            print("saa_intro_response: ",response.json())
+            return response.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
 
-    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
 
-    return result
 
 
 async def generate_saa_response(
@@ -138,17 +144,24 @@ async def generate_saa_response(
     userquery: str
 ):
     logging.info("username: ",username)
+    
     # call Saa service api
-    result=f"It seems you are embracing an healthy and positive lifestyle, I would like to learn more about your hobbies and interest by asking how much do you often spend on reading habit and what are some of reading topics that you are interested in ?"
+    payload = {"username": username,
+               "message":userquery}
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(SAA_SERVICE_URL+'get_response_saa_chat', json=payload)
+            response.raise_for_status()
+            print("saa_response: ",response.json())
+            return response.json()
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
+    
 
     return result
 
-    # final_response=""
-    # for chunk in result.split():
-    #     final_response+=" "+chunk
-    #     yield json.dumps({"intermediate_token":chunk}) + "\n"
-
-    # yield json.dumps({"last_token": final_response[1:]}) + "\n"
+    
 
 
 async def generate_system_response(
