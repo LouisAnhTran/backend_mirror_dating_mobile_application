@@ -64,6 +64,23 @@ async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInR
         logging.info(f"Failed to retrieve user by {field_name}: ",e.args)
         raise HTTPException(status_code=500,detail="server error")
 
+async def retrieve_user_by_phoneumber(phonenumber):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select * from users as u
+        where u.phone_number=$1;
+        '''
+
+        result=await conn.fetch(query,phonenumber)
+
+        return result
+    
+    except Exception as e:
+        logging.info(f"Failed to retrieve user by {phonenumber}: ",e.args)
+        raise HTTPException(status_code=500,detail="server error")
+
 async def retrieve_otp_by_phone_number(phone_number):
     conn=await get_connection()
 

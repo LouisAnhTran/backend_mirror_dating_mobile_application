@@ -47,7 +47,8 @@ from src.database.db_operation.user_auth.db_operations import (
     retrieve_otp_by_phone_number,
     insert_new_user,
     retrieve_user_by_field_value,
-    retrieve_saa_history_chat
+    retrieve_saa_history_chat,
+    retrieve_user_by_phoneumber
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -232,7 +233,13 @@ async def verify_otp(verification: OTPVerification):
     
     if stored_otp[0]['otp_code'] == verification.otp:
         # Successful verification
-        return {"status": "Verification successful"}
+        user=await retrieve_user_by_phoneumber(
+            phonenumber=verification.phone_number
+        )
+        
+        return {"status": "Verification successful",
+                "username": "" if not user else user[0]['username']}
+        
     raise HTTPException(status_code=400, detail="Invalid OTP")
 
 

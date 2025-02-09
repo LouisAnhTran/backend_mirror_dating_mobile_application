@@ -159,10 +159,6 @@ async def generate_saa_response(
         raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
     
 
-    return result
-
-    
-
 
 async def generate_system_response(
         llm: AzureChatOpenAI,
