@@ -111,7 +111,7 @@ async def generate_saa_follow_up_question(
     payload = {"username": username}
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(SAA_SERVICE_URL+'get_saa_follow_up_question', json=payload)
             response.raise_for_status()
             print("saa_follow_up: ",response.json())
@@ -128,7 +128,7 @@ async def generate_saa_intro(
     payload = {"username": username}
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(SAA_SERVICE_URL+'get_saa_intro', json=payload)
             response.raise_for_status()
             print("saa_intro_response: ",response.json())
@@ -150,7 +150,7 @@ async def generate_saa_response(
                "message":userquery}
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(SAA_SERVICE_URL+'get_response_saa_chat', json=payload)
             response.raise_for_status()
             print("saa_response: ",response.json())
