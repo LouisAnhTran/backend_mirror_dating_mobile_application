@@ -45,5 +45,5 @@ app.include_router(sia_profile_creation,prefix=f"{PREFIX}sia_engine")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=PORT, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0",timeout_keep_alive=120,port=PORT, reload=True)
 
