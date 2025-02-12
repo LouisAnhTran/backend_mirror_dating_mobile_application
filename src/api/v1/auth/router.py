@@ -126,7 +126,6 @@ async def generate_otp(request: OTPRequest):
 
     logger.info("otp: ",request.phone_number)
     
-    time.sleep(3)
 
     # Send OTP via Twilio
     try:
@@ -162,8 +161,6 @@ async def generate_otp(request: OTPRequest):
 
     logger.info("otp: ",request.phone_number)
     
-    time.sleep(3)
-
 
     # Send OTP via Twilio
     try:
@@ -179,7 +176,6 @@ async def generate_otp(request: OTPRequest):
 
 @api_router.post("/sign-in-by-email")
 async def generate_otp(request_body: SignInByEmail):
-    time.sleep(4)
 
     logging.info("request_body: ",request_body)
 
@@ -226,8 +222,6 @@ async def verify_otp(verification: OTPVerification):
     stored_otp = await retrieve_otp_by_phone_number(verification.phone_number)
     logging.info("stored_otp: ",stored_otp)
 
-    time.sleep(3)
-
     if not stored_otp:
         raise HTTPException(status_code=404, detail="OTP not found or phone number is not valid")
     
@@ -246,8 +240,6 @@ async def verify_otp(verification: OTPVerification):
 @api_router.get("/test_api_react_native")
 async def test_api_react_native():
     
-    time.sleep(5)
-
     return {"data":"successful"}
 
 @api_router.post("/user_signup")
@@ -260,7 +252,6 @@ async def user_signup(request_body: UserSignUpRequest):
         field_value=request_body.phonenumber
     )
 
-    time.sleep(4)
 
     if user_by_username:
         raise HTTPException(
@@ -278,7 +269,6 @@ async def user_signup(request_body: UserSignUpRequest):
 
 @api_router.post("/login")
 async def login_for_access_token(request_body: UserSignInRequest ):
-    time.sleep(4)
 
     logging.info("request_body: ",request_body)
 
@@ -323,7 +313,7 @@ async def login_for_access_token(request_body: UserSignInRequest ):
 async def load_conversation_saa_user_profile_creation(username: str):
     logging.info("username: ",username)
 
-    time.sleep(4)
+
 
     # check if prior conversation exists
     history_messages=await retrieve_saa_history_chat(
@@ -345,7 +335,6 @@ async def get_saa_intro_or_follow_up(request: GetSaaFollowUpOrIntroRequest):
         username=request.username
     )
 
-    time.sleep(5)
 
     logging.info("history_message ",history_messages)
 
@@ -366,7 +355,6 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
     logging.info("username: ",request.username)
     logging.info("user query: ",request.userinput)
 
-    time.sleep(5)
     
     saa_response=await generate_saa_response(
         username=request.username,
