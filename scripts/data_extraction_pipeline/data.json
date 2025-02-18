@@ -1,0 +1,32 @@
+{
+    "[___]": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null"
+    },
+    "12345": {
+        "gender": "Female",
+        "age": 19,
+        "gender_preferences": "Male",
+        "age_preferences": "19-23"
+    },
+    "ADYUU": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "20-30"
+    },
+    "aidentan": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-26"
+    },
+    "AimingForTheSun": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25"
+    }
+}
