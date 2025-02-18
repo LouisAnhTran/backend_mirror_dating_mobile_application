@@ -3,3 +3,4 @@ docker-compose.yml
 credentials/
 app_config
 ./scripts/data_extraction_pipeline/.env
+./data_extracted
