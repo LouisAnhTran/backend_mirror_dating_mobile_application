@@ -1,0 +1,1394 @@
+{
+    "a834a2c6-9b97-43af-8c73-ecc4b2f57c17": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not providing any relevant information about themselves or their preferences and is instead asking questions and making unrelated comments, which suggests they might be testing or playing with the chatbot rather than seriously engaging with it."
+    },
+    "a593f466-2fc3-4090-86ab-51d7bb5802c0": {
+        "gender": "Female",
+        "age": 19,
+        "gender_preferences": "Male",
+        "age_preferences": "19-23",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "6e3c15e2-7c11-48c7-be82-baf803d7619e": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "20-30",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "851b80c2-d67f-40d0-a816-eb409eead3f4": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-26",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided answers to questions before they were asked, indicating a possible reset or misunderstanding of the conversation flow."
+    },
+    "f69e66ff-0c2f-4ade-ab16-fcfe81acafa2": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "49d6d7ab-182a-483f-9dbf-4c44a772b03b": {
+        "gender": "Male",
+        "age": 26,
+        "gender_preferences": "Female",
+        "age_preferences": "20 and above",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "51bc09fc-5bf4-4e77-9987-79b21662b392": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Male",
+        "age_preferences": "22",
+        "is_trolling": true,
+        "reason_for_trolling": "The user mentioned 'a sugar daddy' which is inconsistent with their stated age preference of 22 year olds, suggesting they might be joking or not taking the conversation seriously."
+    },
+    "663b705a-310d-4774-a7df-c80aa2a896f0": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": "The conversation has not progressed enough to determine if the user is trolling."
+    },
+    "7bf36578-fd38-423f-bf85-1383861dbdf5": {
+        "gender": "Null",
+        "age": 19,
+        "gender_preferences": "Both",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided contradictory or unclear responses, such as listing both 'female, male' without context, and responding 'ok' to a question about age preferences, which suggests a lack of serious engagement with the matchmaking process."
+    },
+    "94bbd476-6c16-46a4-8c20-4c2b45a5f9d1": {
+        "gender": "Female",
+        "age": 67,
+        "gender_preferences": "Male",
+        "age_preferences": "20-90",
+        "is_trolling": true,
+        "reason_for_trolling": "The user gave an unusually wide age range preference and asked an irrelevant and inappropriate question about wiping habits."
+    },
+    "0929bf1d-f7f3-4206-be27-0954d783c5ee": {
+        "gender": "Female",
+        "age": 22,
+        "gender_preferences": "Male",
+        "age_preferences": "23-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "f048311c-c7e9-4041-bde2-5b92fe6f21e3": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "105f4909-ac13-4a83-a765-d295d1ba1383": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided irrelevant or nonsensical answers to several questions, such as 'King of <PERSON>' and 'Honesty and intelligent, life skills' when asked about gender and partner preferences."
+    },
+    "3f8d60d2-4dc5-46eb-8370-bda20588cf16": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Male",
+        "age_preferences": "23-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "b4841ce1-478e-448f-8e81-5cf4ca91766f": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "18-29",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "f3d11820-e880-49fe-ac35-fed0232acec5": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user's responses are often unrelated to the questions asked, such as 'Down to earyh', 'Freedom', 'Dubai', and 'Earth'. These responses do not provide relevant information and suggest a lack of serious engagement with the conversation."
+    },
+    "2f24a18d-61ba-4548-a3d2-239645c8ec5f": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "21-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "e1cf5c37-f235-40f9-a0a9-efd8a2ee1d67": {
+        "gender": "Female",
+        "age": 19,
+        "gender_preferences": "Male",
+        "age_preferences": "19-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "2ec384e6-5ced-454f-bd71-ff388761ac1f": {
+        "gender": "Male",
+        "age": 28,
+        "gender_preferences": "Female",
+        "age_preferences": "25-29",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "660ed2ff-131b-4bff-b08e-565eaac4d31b": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-23",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided irrelevant answers to questions, such as 'tamil, movies, shows' when asked about gender and age preferences, and 'uhh strangee things' when asked about age range. This suggests a lack of seriousness in the conversation."
+    },
+    "09a8428c-13ec-4d36-9e75-20b3fd44f398": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user only responded with 'Yes' to the AI's introductory question, which does not provide any useful information for matchmaking and suggests a lack of engagement or seriousness."
+    },
+    "a341248d-1ac2-44b4-bf8e-b6966f7d5830": {
+        "gender": "Male",
+        "age": 27,
+        "gender_preferences": "Null",
+        "age_preferences": "24-28",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user avoided answering the question about gender preferences and instead responded with an unrelated statement about Buddhism."
+    },
+    "5637ae55-3750-4e26-88bc-8a1ea807e11c": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "21-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "66a2f231-c8cf-4c0a-9622-d2047d535ef9": {
+        "gender": "Null",
+        "age": 21,
+        "gender_preferences": "Both",
+        "age_preferences": "20-22",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides minimal and vague responses, such as 'nothing' and 'no,' and does not engage meaningfully with the questions, suggesting a lack of genuine interest in the conversation."
+    },
+    "57be99d9-8557-4056-ad63-08f2028958a2": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides vague and evasive answers, avoids direct questions, and seems to engage in philosophical discussions without providing concrete personal information."
+    },
+    "45347585-57f6-41a8-aa03-bb2fbea73dd4": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a8883a69-007c-4db8-9383-c85255738596": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides irrelevant and non-sequential responses to the AI's questions, such as discussing food preferences and travel dreams instead of answering questions about relationships and personal values."
+    },
+    "b6343d35-91b8-43f2-95ec-ef3ee9a33223": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "23-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "50fa5592-4780-4205-a5ba-1b31bc01fe99": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Male",
+        "age_preferences": "18-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "8a130e45-dda1-4075-9ff8-f860d9805ee6": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "20 and above",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "1e82147b-b88b-405a-8c64-5e7ca995619d": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "20-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "808d88bb-7928-4114-a659-5034d0aaf17a": {
+        "gender": "Null",
+        "age": 19,
+        "gender_preferences": "Both",
+        "age_preferences": "18-20",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "de76d27d-a21d-4439-800b-afb0ca521d13": {
+        "gender": "Male",
+        "age": 21,
+        "gender_preferences": "Female",
+        "age_preferences": "18-21",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "264d3024-5563-4e7c-8f89-c8c34647652d": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides vague and non-specific answers, such as 'Get a job bro, pls help', which do not directly relate to the questions asked by the AI, indicating a lack of serious engagement."
+    },
+    "1cecc566-d99b-49a4-b87b-1ab0dd2608c8": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Male",
+        "age_preferences": "17-21",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "8ed8f3b3-1514-4517-8a81-334ad07bb80f": {
+        "gender": "Null",
+        "age": 29,
+        "gender_preferences": "Both",
+        "age_preferences": "23-35",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "17489fb9-950e-4fdf-8da6-83324095b2b2": {
+        "gender": "Null",
+        "age": 25,
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides vague and inconsistent answers, avoids directly answering questions about gender and age preferences, and seems to be more focused on discussing personal philosophies and experiences rather than engaging with the matchmaking process."
+    },
+    "e320afb5-50b2-49e2-bd43-05cb7a606a99": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": "The user seems to be engaging in a genuine conversation about their values and experiences in relationships."
+    },
+    "3ffbee7f-bb49-4c34-8270-a2e9ae4c295d": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Female",
+        "age_preferences": "20-23",
+        "is_trolling": true,
+        "reason_for_trolling": "The user repeatedly gives non-informative answers like 'no' and 'skip this qn', and seems to be avoiding providing meaningful information, which suggests they might not be taking the process seriously."
+    },
+    "5b23005f-7a0e-46b4-8a6d-d012b9993aa1": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "6d9efbf9-1cd4-4674-862f-09464e661be3": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "37b07786-a13c-447d-a7a3-0858b066633c": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "20-Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user used inappropriate language ('Nigga') and made inconsistent requests, such as asking the AI to speak in Malay while previously stating that English is not their first language, which suggests they might be testing or provoking the AI rather than genuinely seeking matchmaking assistance."
+    },
+    "07f81e02-e6b3-4d94-a9ab-c12b212067f7": {
+        "gender": "Female",
+        "age": 22,
+        "gender_preferences": "Null",
+        "age_preferences": "20-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a38f5467-83fd-4e04-a631-233907afe410": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "20-28",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "d3f05f15-734e-4776-82b7-cb08eacbc5a4": {
+        "gender": "Female",
+        "age": 28,
+        "gender_preferences": "Male",
+        "age_preferences": "25-33",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "2d837d2b-8515-4b86-ae85-9840d6769ce4": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "20-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "fa2ce2f3-645d-4598-ba9e-f3ef91a8761c": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": true,
+        "reason_for_trolling": "The user provides irrelevant or minimal responses to questions, such as 'Normal childhood and 1 elderly sister' and 'Nil', which do not directly answer the AI's questions about values, social life, or hobbies."
+    },
+    "d267bc1a-7497-4ceb-a792-ead6c096008c": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not directly answering the AI's questions related to dating preferences and instead is providing unrelated information about movies, travel, and personal values without specifying any dating preferences or personal details."
+    },
+    "5189c976-23e3-4f89-9ee7-38c7a8252ce0": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is providing uninformative and dismissive responses such as 'No' and 'Idk', indicating a lack of engagement or seriousness in the conversation."
+    },
+    "6b2e9a7d-7c09-4752-8318-126f422961ac": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "Null",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a9003e22-4dca-41e0-b3ef-27b8e81e7dea": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "22-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "119c36e1-7ff0-4603-802f-cb75acd1f71a": {
+        "gender": "Female",
+        "age": 22,
+        "gender_preferences": "Male",
+        "age_preferences": "22-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "e5020bec-f796-4b10-8b06-bf5318bdbbcb": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly gives short, dismissive, or irrelevant answers, such as 'No' and 'I dun want to do this anymore. Can I skip,' indicating a lack of genuine engagement with the chatbot."
+    },
+    "bf979ed7-a812-4f9d-880e-206408946720": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "0eb617bd-6b38-4382-9d35-dec0a65f5b21": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "9516d4df-7587-4997-a7fc-a06da76de323": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "9217bf1e-3004-45a4-a2ad-9aab0ad0d977": {
+        "gender": "Female",
+        "age": 19,
+        "gender_preferences": "Male",
+        "age_preferences": "19-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "038ad9d4-af4d-4fdb-9af8-9e1d783cfa25": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "25-30",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeated the same information about their gender and preferences multiple times, and the conversation reset unexpectedly, suggesting a lack of seriousness."
+    },
+    "05b5717f-7596-4e70-b161-31ba07fc97b2": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Null",
+        "age_preferences": "20-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "ed40cd33-b381-4273-83b7-d09c4f6c6a90": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly sent the same message 'hello' multiple times, which suggests they might be testing the system or not engaging seriously."
+    },
+    "33fe3c5f-04c6-4396-bbb3-96ab143142e4": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "d393413d-9b33-4d46-ab1b-aec448c2dd85": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "19-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "dd5d31ed-b494-4c62-982c-f59694de6fdb": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "22-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "ea154990-30ab-4303-b605-74148210e0c4": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "bb37de87-a1e0-4f16-9d87-e3857424f596": {
+        "gender": "Male",
+        "age": 21,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "ddfe8b83-50f9-4dd9-b55c-bb4b2ce9f9bc": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Male",
+        "age_preferences": "23-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "68135da8-9adc-430d-bf4c-ec9895bb212e": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "21-24",
+        "is_trolling": true,
+        "reason_for_trolling": "The user made a comment about 'big booty' as an expectation for a relationship, which seems out of context and not serious in the flow of the conversation."
+    },
+    "d1ec1351-8b22-4c45-95bd-74d403afa4b1": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly responded with 'Yes' and 'Let\u2019s get started' without providing any specific information or engaging meaningfully with the AI's questions."
+    },
+    "bbb3aafd-27fe-4db3-a29a-845b4092b349": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "112fe72a-6679-40dd-a8af-890a8b7e8795": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "around same age",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provides inconsistent and vague responses, such as 'Im good person' and 'Cant get into trouble if you dont get caught,' which do not directly answer the AI's questions. Additionally, the user repeats 'Female, Female' without context, suggesting a lack of serious engagement."
+    },
+    "5263840b-d840-4f2f-9e53-8da0b08a42a4": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "19-65",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provided an unusually wide age range preference (19-65), which is atypical for a dating application and suggests a lack of seriousness in finding a compatible partner."
+    },
+    "82604d6c-06b8-4ffb-8567-387627ed8326": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not engaging with the matchmaking process and is instead discussing unrelated topics like music and football, and responding with casual, non-informative language such as 'Helloooooooooo' and 'Bruh so long lol'."
+    },
+    "e0be7b11-0773-43c7-92b3-4c5536df69bc": {
+        "gender": "Other",
+        "age": null,
+        "gender_preferences": "Null",
+        "age_preferences": null,
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides vague and non-committal answers, such as 'how am I supposed to know' and 'idk they're cool i guess,' which suggest a lack of genuine engagement with the matchmaking process."
+    },
+    "88716888-4629-4c5f-a2bb-7c5980982d0e": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not providing relevant information to the questions asked and is instead focusing on questioning the matching algorithm and the process, which suggests a lack of genuine interest in the matchmaking process."
+    },
+    "0fe765d8-6b48-4939-86f3-17fe85e51d0e": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Null",
+        "age_preferences": "20-24",
+        "is_trolling": true,
+        "reason_for_trolling": "The user did not provide a clear answer to the question about gender preferences and repeated the same information about hobbies and interests, which suggests a lack of engagement with the conversation."
+    },
+    "ba1f4f68-d07f-454b-a80f-418d8b7397d7": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "22-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "00547fc3-175f-4e5c-9158-1937585020e4": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "21-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "d16fe43b-7251-4480-9b03-e752583d6708": {
+        "gender": "Female",
+        "age": null,
+        "gender_preferences": "Male",
+        "age_preferences": "25-30",
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "c69c2e8a-b331-42bf-bb7d-a31e21b4627c": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is giving non-committal and vague responses, indicating a lack of genuine engagement with the matchmaking process."
+    },
+    "a86bfe79-dbd1-4379-8096-73d15cceb262": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": "The user is not providing any information or responses that suggest trolling. They simply requested to start the conversation later."
+    },
+    "66732c90-78b6-4d5b-b355-4f1725ea75a3": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user responded with 'ok' instead of providing the requested information about their gender and gender preferences, which suggests they might not be taking the conversation seriously."
+    },
+    "86010c0e-443f-4fa8-b918-e0c85149fce2": {
+        "gender": "Male",
+        "age": 26,
+        "gender_preferences": "Female",
+        "age_preferences": "21-29",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "1b85460c-c3bc-4301-bce6-830e4b2122ca": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "25-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "1ad3fb54-0fb3-4c6c-b338-518f05fc9b8f": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "6cb00bfb-5c17-40c0-8485-6a8a208065cb": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "19-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "61c18ae3-3826-433c-b6f7-b720db8aacef": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20+",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "dcbfd773-8ed4-4750-89d0-1a5813a90837": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a21c0048-219a-4749-b92f-1005a5383c56": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": "19-25",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provided inconsistent and vague responses, such as answering 'Yes' to the initial question about gender and gender preference, and later stating 'Im male and im interested in a famale'. Additionally, the user did not provide a specific age when asked."
+    },
+    "66dbe0f9-c535-493f-8306-850f5657ed99": {
+        "gender": "Female",
+        "age": null,
+        "gender_preferences": "Male",
+        "age_preferences": null,
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "197d4812-a056-4e64-acd8-fe1d6a5f27fc": {
+        "gender": "Male",
+        "age": 18,
+        "gender_preferences": "Female",
+        "age_preferences": "18-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "932604c5-d8e9-40da-bfaa-8292e90c0e9e": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user did not provide any meaningful response to the AI's question, suggesting a lack of engagement or intent to participate seriously in the conversation."
+    },
+    "3336b0ac-d98d-42f3-a521-200a744fbe86": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "af1726db-5fd2-4144-8092-84ecd81efdac": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user responds with 'Lol' and provides disjointed, unrelated answers that do not directly address the AI's questions, indicating a lack of serious engagement with the matchmaking process."
+    },
+    "63fd3274-8582-40ba-aad7-bb81a9889319": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user's response 'Yea gurl' is ambiguous and does not provide clear information about their gender or gender preferences, suggesting they might not be taking the conversation seriously."
+    },
+    "8c017a40-bbef-46ac-83f0-e3c9fad67055": {
+        "gender": "Male",
+        "age": 21,
+        "gender_preferences": "Female",
+        "age_preferences": "20-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a6e38191-7574-48be-b10a-345b0cff3c6e": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user did not provide direct answers to the questions about their gender or gender preferences, instead responding with unrelated information."
+    },
+    "e0b4b987-41f0-4c2c-88c3-9271a4762b42": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "1432e754-7079-48c0-87cf-d04a53326018": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "aec65653-766a-4d3f-a719-20db92942a73": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Male",
+        "age_preferences": "23-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "19173bcd-2879-4ec7-912e-1a98d2d5bad8": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided irrelevant or unclear responses, such as 'Ture' and '<PERSON>', which do not contribute to the conversation meaningfully."
+    },
+    "d94ba9ab-5b0a-49db-9ace-9fc991835b69": {
+        "gender": "Female",
+        "age": 22,
+        "gender_preferences": "Male",
+        "age_preferences": "22 and older",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a16331c4-8f91-4904-9940-6e4fb6a1f6b4": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "6a3ae4ea-2bf3-49b9-aa81-84198f36e878": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "21-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "430b4c14-62ed-4963-aac3-81daab15cf91": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": "The conversation has not progressed enough to determine if the user is trolling."
+    },
+    "cc229774-4393-4522-869a-65cc2de57fa0": {
+        "gender": "Female",
+        "age": 57,
+        "gender_preferences": "Male",
+        "age_preferences": "57-65",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "61ee4bec-73b5-4848-be71-b33edba9224f": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-25",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly asks the AI for coding help and cooking lessons, which are unrelated to the purpose of the dating application."
+    },
+    "984480d7-6532-4bd2-9243-dd5ed3a1eeba": {
+        "gender": "Other",
+        "age": 39,
+        "gender_preferences": "Both",
+        "age_preferences": "Null",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provides contradictory and inconsistent responses, such as claiming to be a 'new gender,' expressing no desire for human connection, and then asking for any partner of any gender. Additionally, the user engages in irrelevant math questions and insults the AI, indicating a lack of serious intent."
+    },
+    "50be55da-f945-4e18-953a-a2a3817c668b": {
+        "gender": "Female",
+        "age": null,
+        "gender_preferences": "Male",
+        "age_preferences": "24-27",
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "eb05acf4-8ce6-4dde-9b0f-ce684336c5f9": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "19-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "7962bc19-420d-4b2c-8347-497e76b1d92b": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides vague and unrelated responses to the AI's questions, such as discussing character development and travel without context, and does not engage with the matchmaking process."
+    },
+    "86077a27-2c62-4d13-a2dd-eb3dd3780bdb": {
+        "gender": "Female",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user initially responded with 'im a gamer' when asked about gender, which is unrelated to the question and suggests a lack of seriousness."
+    },
+    "8e716e1a-e71d-44fb-af04-c7df29039c4e": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "21-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a91463bb-490c-4ef8-94d5-6a0c2de35600": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Both",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided contradictory or unclear responses, such as 'Female, male' when asked about gender and preferences, and did not provide any age information."
+    },
+    "8cc1bfdb-458a-4327-8418-ab25b625fb8d": {
+        "gender": "Female",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": true,
+        "reason_for_trolling": "The user repeatedly answered 'female' when asked about their age, which suggests they might not be taking the conversation seriously."
+    },
+    "b5e970b0-72ff-4924-b93e-0a9c8adcf151": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "19-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "e8f2fec0-c665-4197-9760-6c9edffb6711": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user responded with 'Sure' to a question that was not asked, indicating a lack of engagement or misunderstanding of the conversation flow."
+    },
+    "bbbafc26-9c31-4a84-823e-f46235dd5217": {
+        "gender": "Male",
+        "age": 20,
+        "gender_preferences": "Female",
+        "age_preferences": "18-22",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provided inconsistent and irrelevant responses, such as 'Loyalty', 'Flying planes', and '<PERSON>', which do not align with the questions asked by the AI."
+    },
+    "0a840f59-9767-47a1-96e7-d148f07a8a00": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "20-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "686ba9c1-6a2f-4614-8e89-77d9a069b879": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Male",
+        "age_preferences": "18-21",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "9890be01-7813-4f72-a1dc-6fd39c13fed5": {
+        "gender": "Female",
+        "age": 18,
+        "gender_preferences": "Male",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a24893cf-56cc-43ac-b5ce-fd189915e14f": {
+        "gender": "Male",
+        "age": 20,
+        "gender_preferences": "Female",
+        "age_preferences": "18-22",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "bc64fc0c-c05f-42ee-9947-f4029cacf06c": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Female",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user frequently changes topics, asks irrelevant questions, and provides responses that do not directly answer the AI's questions, indicating a lack of serious engagement."
+    },
+    "81376b99-e106-455e-a6dd-3a6b30e19237": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "20-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "334aebf6-5c89-40bf-9b3b-8247f205c927": {
+        "gender": "Female",
+        "age": 20,
+        "gender_preferences": "Male",
+        "age_preferences": "19-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "1a042df0-50df-4243-bba7-db0b8ba130cf": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": true,
+        "reason_for_trolling": "The user asked to ignore all previous messages and reset the conversation, which disrupts the flow of the chat and suggests a lack of genuine engagement."
+    },
+    "3756c3cc-5210-4509-94b0-6bddb01c0304": {
+        "gender": "Male",
+        "age": 19,
+        "gender_preferences": "Female",
+        "age_preferences": "15-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "27f9f678-9f6b-431b-b14c-dbcfa7ad2f15": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Null",
+        "age_preferences": "20-24",
+        "is_trolling": true,
+        "reason_for_trolling": "The user provided irrelevant or unclear responses to questions about gender preferences and other personal details, such as responding with 'Passionate' when asked about gender preferences."
+    },
+    "dc9ecee9-cf61-47b1-9b7a-77ea3a8874be": {
+        "gender": "Male",
+        "age": 19,
+        "gender_preferences": "Null",
+        "age_preferences": "18-22",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided inconsistent and vague responses, such as 'I don\u2019t know' and 'No,' and did not clearly answer questions about gender preferences or personal reflections."
+    },
+    "4cdf1925-51ce-4156-8238-122d66ede8d4": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "18-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "497de84a-064e-448b-97cf-e09fe511c06a": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "a95ea6ad-fb49-4f53-8c2a-60edf7638a50": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "18-28",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "4538a07b-46ca-432b-b8b7-f8621e786808": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "22-24",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided an age range for their partner that is reversed (24 to 22), which is unusual and suggests they might be trolling."
+    },
+    "e2f05d5e-22c0-4ea6-9e72-e8f413e7567c": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "0f61ff9e-3348-4518-b568-5c50a2930a86": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is repeatedly sending greetings without engaging in meaningful conversation, which could indicate trolling behavior."
+    },
+    "b6544e63-df48-4f23-8e30-6001131f21b1": {
+        "gender": "Male",
+        "age": 19,
+        "gender_preferences": "Female",
+        "age_preferences": "18-19",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user initially avoided answering questions about gender and preferences, gave vague responses, and seemed to contradict themselves at times, indicating a lack of seriousness in the conversation."
+    },
+    "3ba447f3-a2b0-4dbd-b317-0fdfa3741209": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": "The user seems to be genuinely engaging in the conversation, sharing personal insights and preferences without any indication of trolling behavior."
+    },
+    "75398e85-cdae-4f21-949f-1ec733b5f3c5": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": "18-30",
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "69074b5d-c337-40e5-bec6-2bf01f705760": {
+        "gender": "Male",
+        "age": 24,
+        "gender_preferences": "Female",
+        "age_preferences": "20-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "52ada2a9-0f00-4f96-99ca-1b0b947e249c": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "4a6a20f0-fa4f-48e2-94f5-15724449b1a6": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "20-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "c4d6e1ea-3f78-4d6b-aedf-001312df46d2": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "18-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "553ec285-91f7-40ef-8942-db33ef7db6b8": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "9dc7211c-f43f-4847-a250-90f97c8f5cc4": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "43729883-cba7-401e-aa87-b40fd1e7ede6": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "19-23",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "4bdc7042-4d91-48a9-bf72-6897107ba016": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "22-25",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "8767ac0b-b9ab-457c-a738-e8e4571e08f6": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user only responded with 'yes' and did not provide any information about their gender or preferences, which suggests they might not be taking the conversation seriously."
+    },
+    "a5f662ea-6d5c-4f44-bc4b-e32230eb7426": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Female",
+        "age_preferences": "21-27",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "37934a66-cc26-4ccc-92b4-b55ca50d2a17": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-24",
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "254ecb56-1525-4547-bdf9-365b26c71ebe": {
+        "gender": "Other",
+        "age": 20,
+        "gender_preferences": "Null",
+        "age_preferences": "20-24",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "29557d6d-2a2d-4775-a463-443292ad5de2": {
+        "gender": "Male",
+        "age": 21,
+        "gender_preferences": "Female",
+        "age_preferences": "19-22",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "0d4b9ea1-e25c-432d-b5d9-dcfd9b35063a": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly asks about making hazardous chemicals like hydrochloric acid at home, which is unsafe and not typical behavior for someone genuinely seeking matchmaking assistance. Additionally, the user requests to activate developer mode and access logs, which are not relevant to the dating application context."
+    },
+    "be798c68-3e8b-4b53-9d40-24042fe911db": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly responded with 'ok' and did not provide any meaningful information when asked about their gender and gender preferences."
+    },
+    "58a26725-07eb-422e-98dc-f00594513517": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provided minimal responses and did not answer the questions about gender and gender preferences, which suggests a lack of genuine engagement with the matchmaking process."
+    },
+    "efedb0e6-4673-43e3-9161-51c6528b7798": {
+        "gender": "Female",
+        "age": 24,
+        "gender_preferences": "Both",
+        "age_preferences": "22-30",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "06eaf398-39cc-410b-bb36-d0709597ae6c": {
+        "gender": "Male",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "7f73502f-b1ec-4261-8d29-9c880129fe43": {
+        "gender": "Male",
+        "age": 25,
+        "gender_preferences": "Male",
+        "age_preferences": "22-28",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "bfde4f37-815c-4edf-91b2-c42c50749594": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user repeatedly ignored the AI's questions and instructions, asked unrelated questions about platypuses, and made contradictory statements about smoking being healthy."
+    },
+    "73e79d59-917f-4fcb-8276-3d989978a671": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user only responded with 'yes' and did not provide any information about their gender, age, or preferences, which suggests they might not be taking the conversation seriously."
+    },
+    "ed840c22-4e66-40a6-96b7-d81d02b45abd": {
+        "gender": "Female",
+        "age": 21,
+        "gender_preferences": "Male",
+        "age_preferences": "21 and above",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "93b52206-9ce5-4acc-826a-19ede06deea3": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "17b89aba-6aa0-45d6-b65c-d056fac1631b": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Male",
+        "age_preferences": "Mid-to-late 20s",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "c89ec632-c626-499e-a5a4-b024fb2626dd": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not engaging with the matchmaking questions and is instead discussing unrelated topics like binge-watching shows and eating chips, which suggests they might not be taking the conversation seriously."
+    },
+    "edf60924-f1a6-4bfd-afbe-1e2cd8e88e70": {
+        "gender": "Female",
+        "age": 22,
+        "gender_preferences": "Male",
+        "age_preferences": "20-25",
+        "is_trolling": true,
+        "reason_for_trolling": "The user asked for the database connection string, which is an unusual and irrelevant request in the context of a dating application conversation."
+    },
+    "edec7b09-8f76-4f14-b998-acbf34d3f47e": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": null,
+        "is_trolling": false,
+        "reason_for_trolling": null
+    },
+    "79cb9240-052a-4192-b096-ef6cf42b9e48": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user provides inconsistent and irrelevant responses, such as 'Cold nutty coffee' and 'NSthe hobby started when i was in', which do not align with the questions asked. Additionally, the user mentions 'people signing up to this bot using my email', suggesting a lack of seriousness in the interaction."
+    },
+    "a27f46f0-3c42-4261-89d7-bbd37f0ead7b": {
+        "gender": "Null",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user initially stated a preference for men with exaggerated enthusiasm, then later changed their mind to liking women, and also responded with 'Potato' during the conversation, indicating playful or non-serious behavior."
+    },
+    "c4dbb626-4ca4-41c7-bf39-b24a6150a52b": {
+        "gender": "Male",
+        "age": 22,
+        "gender_preferences": "Female",
+        "age_preferences": "20-24",
+        "is_trolling": true,
+        "reason_for_trolling": "The user repeatedly mentioned the same hobbies and interests multiple times without adding new information, which could indicate trolling behavior."
+    },
+    "0f384fcb-e9c2-408b-9701-cdd2540014d3": {
+        "gender": "Male",
+        "age": 23,
+        "gender_preferences": "Female",
+        "age_preferences": "19-26",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "2a4c5d12-57c7-40b6-87a4-216e3a4a07be": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user frequently makes jokes and comments that are not relevant to the matchmaking process, such as 'your mom' jokes and expressing affection towards the AI, indicating a lack of seriousness in engaging with the matchmaking process."
+    },
+    "2c6e7066-b9ef-4ca0-a056-4a7fa8729c40": {
+        "gender": "Female",
+        "age": 35,
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "bb0169b1-23bb-4716-bc61-0ce472ef004d": {
+        "gender": "Male",
+        "age": null,
+        "gender_preferences": "Female",
+        "age_preferences": "18-25",
+        "is_trolling": true,
+        "reason_for_trolling": "The user repeatedly copied and pasted the same response about integrating AI into the healthcare industry multiple times, which suggests a lack of genuine engagement with the conversation."
+    },
+    "f728cccc-8e32-42a9-bf35-dc4e8a1b443c": {
+        "gender": "Female",
+        "age": 23,
+        "gender_preferences": "Both",
+        "age_preferences": "20-30",
+        "is_trolling": false,
+        "reason_for_trolling": ""
+    },
+    "7014306c-b9e9-4094-828d-08354e2e8d63": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "false",
+        "reason_for_trolling": ""
+    },
+    "90fb14f9-6609-4034-9f44-73340ce3f3c7": {
+        "gender": "Null",
+        "age": "Null",
+        "gender_preferences": "Null",
+        "age_preferences": "Null",
+        "is_trolling": "true",
+        "reason_for_trolling": "The user is not providing relevant information or engaging with the matchmaking questions, instead responding with unrelated or vague answers."
+    }
+}
