@@ -10,7 +10,8 @@ from src.utils.exceptions import return_error_param
 from src.database.db_connection.connection import get_connection
 from src.models.requests import (
     UserSignUpRequest,
-    UserSignInRequest)
+    UserSignInRequest,
+    UserOnboardingRequest)
 
 async def add_mobile_phone_and_otp(phone_number, otp_code):
     conn=await get_connection()
@@ -28,23 +29,71 @@ async def add_mobile_phone_and_otp(phone_number, otp_code):
         logging.info("Failed to add phone number and otp to table: ",e.args[0])
         raise HTTPException(status_code=500,detail="server error")
 
-async def insert_new_user(user: UserSignUpRequest):
+async def insert_new_user_for_sign_up(user: UserSignUpRequest):
     conn=await get_connection()
 
     try:
         query = '''
-        INSERT INTO users (username, phone_number, birthday, password, email, firstname, lastname)
-        VALUES ($1, $2, $3,$4,$5,$6,$7)
+        INSERT INTO users (
+            username, 
+            phone_number, 
+            birthday, 
+            password, 
+            email, 
+            firstname, 
+            lastname,
+            telegram_handle
+        )
+        VALUES ($1, $2, $3,$4,$5,$6,$7,$8)
         '''
 
         hashed_password=hash_password(
             password=user.password
         )
     
-        await conn.execute(query, user.username, user.phonenumber, user.birthday, hashed_password,user.email,user.firstname,user.lastname)
+        await conn.execute(query, user.username, user.phonenumber, user.birthday, hashed_password,user.email,user.firstname,user.lastname,user.telegram_handle)
         logging.info("Successfuly add user to users table")
     except Exception as e:
         logging.info("Failed to add user to users table, error message: ",e.args[0])
+        raise HTTPException(status_code=500,detail="server error")
+
+async def update_user_profile_for_onboarding(user: UserOnboardingRequest):
+    conn=await get_connection()
+
+    try:
+        query = '''
+        UPDATE users 
+        SET 
+            gender = $1,
+            gender_preferences = $2,
+            age_range = $3,
+            height = $4,
+            ethnicity = $5,
+            children = $6,
+            education = $7, 
+            job_title =  $8,
+            religious_beliefs = $9,
+            drink_habit = $10,
+            smoke_habit = $11,
+            is_onboarding_complete=TRUE
+        WHERE username = $12;
+        '''
+        await conn.execute(query, 
+                           user.gender,
+                           user.gender_preferences,
+                           user.age_range,
+                           user.height,
+                           user.ethnicity,
+                           user.children,
+                           user.education,
+                           user.job_title,
+                           user.religious_beliefs,
+                           user.drink_habit,
+                           user.smoke_habit,
+                           user.username)
+        logging.info("Successfuly update user to users table")
+    except Exception as e:
+        logging.info("Failed to update user information: ",e.args[0])
         raise HTTPException(status_code=500,detail="server error")
 
 async def retrieve_user_by_field_value(user: Union[UserSignUpRequest,UserSignInRequest],field_name,field_value):

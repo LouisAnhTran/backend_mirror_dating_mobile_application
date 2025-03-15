@@ -49,9 +49,6 @@ from src.config import (
     OPENAI_API_KEY
 )
 from src.utils.exceptions import return_error_param
-from src.gen_ai.rag_pdf.pinecone_operation import (
-    query_by_username_dockey
-)
 from src.utils.aws_operation import (
     get_file
 )

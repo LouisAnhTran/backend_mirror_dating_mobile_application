@@ -16,14 +16,12 @@ AWS_ACCESS_KEY=os.getenv("AWS_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY=os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_BUCKET_NAME_DEV=os.getenv("AWS_BUCKET_NAME_DEV")
 AWS_REGION=os.getenv("AWS_REGION")
-PINECONE_INDEX_PDF=os.getenv("PINECONE_INDEX_PDF")
-PINECONE_VECTOR_DIMENSION=os.getenv("PINECONE_VECTOR_DIMENSION")
-PINECONE_INDEX_ALL_AI=os.getenv("PINECONE_INDEX_ALL_AI")
 API_VERSION=os.getenv("API_VERSION")
 TWILIO_ACCOUNT_SID=os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_PHONE_NUMBER=os.getenv("TWILIO_PHONE_NUMBER")
 TWILIO_AUTH_TOKEN=os.getenv("TWILIO_AUTH_TOKEN")
 SAA_SERVICE_URL=os.getenv("SAA_SERVICE_URL")
+DATABASE_URL=os.getenv("DATABASE_URL")
 
 secret_name = "all-ai-capstone"
 
@@ -50,7 +48,6 @@ secret = get_secret_value_response['SecretString']
 secret_dict=json.loads(secret)
 
 # import secret from aws secret manager
-DATABASE_URL=secret_dict['DATABASE_URL']
 OPENAI_API_KEY=secret_dict['OPENAI_API_KEY']
 PINECONE_API_KEY=secret_dict['PINECONE_API_KEY']
 GPT4_OPENAI_API_KEY=secret_dict['GPT4_OPENAI_API_KEY']

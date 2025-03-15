@@ -10,7 +10,6 @@ from langchain_community.embeddings import AzureOpenAIEmbeddings
 from langchain_community.chat_models import AzureChatOpenAI
 from datetime import datetime
 import asyncio
-from src.gen_ai.rag_pdf.pinecone_operation import query_by_username_dockey
 from src.models.requests import (
     SingleChatMessageRequest
 )

@@ -9,7 +9,6 @@ from langchain_community.embeddings import AzureOpenAIEmbeddings
 from langchain_community.chat_models import AzureChatOpenAI
 from datetime import datetime
 
-from src.gen_ai.rag_pdf.pinecone_operation import query_by_username_dockey
 from src.gen_ai.rag_pdf.prompt_template import (
     CONDENSE_HISTORY_TO_STANDALONE_QUERY_TEMPLATE,
     CONVERSATION_WITH_REFERENCES_TEMPLATE

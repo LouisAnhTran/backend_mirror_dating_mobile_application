@@ -22,7 +22,26 @@ class UserSignUpRequest(BaseModel):
     )
     email: str=Field(
         example="louisanhtran@gmail.com"
+    ) 
+    telegram_handle: str=Field(
+        example="@nasa1"
     )
+
+
+class UserOnboardingRequest(BaseModel):
+     # Additional fields from the UPDATE statement
+    username: str=Field(example="louis")
+    gender: str = Field(example="Male")
+    gender_preferences: str = Field(example="Female")
+    age_range: str = Field(example="25-30")
+    height: str = Field(example="180cm")
+    ethnicity: str = Field(example="Asian")
+    children: str = Field(example="None")
+    education: str = Field(example="Bachelor's Degree")
+    job_title: str = Field(example="Software Engineer")
+    religious_beliefs: str = Field(example="Atheist")
+    drink_habit: str = Field(example="Occasionally")
+    smoke_habit: str = Field(example="Never")
 
 class LoadSaaConversationRequest(BaseModel):
     username: str=Field(example='louis')
@@ -45,17 +64,6 @@ class OTPVerification(BaseModel):
     phone_number: str=Field(example="+6597755168")
     otp: str=Field(example="696969")
 
-class UserOnboardingRequest(BaseModel):
-    username: str=Field(
-        example="louis_anh_tran")
-    phonenumber: str=Field(
-        example="+6597755168")
-    birthday: str=Field(
-        example="07/01/1998"
-    )
-    password: str=Field(
-        example="12345678"
-    )
 
 class UserSignInRequest(BaseModel):
     username: str=Field(example="louis_anh_tran")
