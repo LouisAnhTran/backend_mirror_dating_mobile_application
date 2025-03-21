@@ -215,3 +215,100 @@ async def fetch_all_messages(
             detail="Database error when inserting entry to messages table"
         )
     
+async def get_user_phonenumber_by_username(username: str):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select 
+            u.phone_number
+        from users as u
+        where u.username=$1;
+        '''
+
+        result=await conn.fetch(query,username)
+
+        return result
+    except Exception as e:
+        print("Failed to retrieve user phone number")
+        logging.info(f"Failed to retrieve user ",e.args)
+        raise RuntimeError("Server error while fetching user phone number")
+
+async def insert_new_pair_to_match_pair_table(
+    match_id: str,
+    user1: str,
+    user2: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = '''
+        INSERT INTO match_pairs (
+            match_id, 
+            user_1, 
+            user_2, 
+            user_1_action, 
+            user_2_action
+        ) 
+        VALUES 
+            ($1, $2 , $3, NULL, NULL)
+        '''
+
+        await conn.execute(query, match_id, user1, user2)
+        
+        print('Successfuly add pair to match_pairs table')
+        logging.info("Successfuly add pair to match_pairs table")
+    except Exception as e:
+        print("Failed to add pair to match_pairs")
+        logging.info("Failed to add pair to match_pairs, error message: ",e.args[0])
+        raise RuntimeError("Server error while add pairs")
+ 
+async def update_user_status_after_match(
+    match_id: str,
+    username: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = '''
+        UPDATE users 
+        SET 
+            status = 'frozen',
+            match_reference_id=$1
+        WHERE username = $2;
+        '''
+
+        await conn.execute(query, match_id,username)
+        
+        print(f'Successfuly update status for user {username}')
+        logging.info(f'Successfuly update status for user {username}')
+    except Exception as e:
+        print("Failed to update status for user")
+        logging.info("Failed to update status for user ",e.args[0])
+        raise RuntimeError("Server error while updating users")
+    
+async def insert_notification_for_user(
+    username: str,
+    category: str,
+    message: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = '''
+        INSERT INTO notification (
+            receiving_user, 
+            category, 
+            event_detail
+        ) VALUES
+        ($1, $2, $3);
+        '''
+
+        await conn.execute(query, username, category, message)
+        
+        print(f'Successfuly add notification for user {username}')
+        logging.info(f"Successfuly add notification for user {username}")
+    except Exception as e:
+        print("Fail to add notification for user {username}")
+        logging.info("Fail to add notification for user {username}",e.args[0])
+        raise RuntimeError("Server error while add pairs")

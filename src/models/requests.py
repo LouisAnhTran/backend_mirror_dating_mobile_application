@@ -27,6 +27,8 @@ class UserSignUpRequest(BaseModel):
         example="@nasa1"
     )
 
+class MatchPairsRequest(BaseModel):
+    match_pairs: List[str]
 
 class UserOnboardingRequest(BaseModel):
      # Additional fields from the UPDATE statement

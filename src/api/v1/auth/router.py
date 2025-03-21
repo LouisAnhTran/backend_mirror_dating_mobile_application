@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Cookie, File, UploadFile, Request, Header
-from typing import List
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+from typing import List,Dict
 from logging_config import logger
 import logging
 import time 
@@ -19,6 +19,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from pydantic import BaseModel
 import random
 from twilio.rest import Client
+import uuid
 
 
 from src.models.requests import (
@@ -30,7 +31,8 @@ from src.models.requests import (
     SignInByEmail,
     GetSaaFollowUpOrIntroRequest,
     GetSaaResponseRequest,
-    UserOnboardingRequest
+    UserOnboardingRequest,
+    MatchPairsRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -44,7 +46,11 @@ from src.database.db_operation.user_auth.db_operations import (
     retrieve_user_by_field_value,
     retrieve_saa_history_chat,
     retrieve_user_by_phoneumber,
-    update_user_profile_for_onboarding
+    update_user_profile_for_onboarding,
+    insert_new_pair_to_match_pair_table,
+    update_user_status_after_match,
+    get_user_phonenumber_by_username,
+    insert_notification_for_user
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -107,6 +113,36 @@ llm = AzureChatOpenAI(
 openaiembeddings=OpenAIEmbeddings(
     api_key=OPENAI_API_KEY
 )
+
+
+# Store WebSocket connections keyed by user_id
+active_connections: Dict[str, WebSocket] = {}
+
+@api_router.websocket("/ws/{username}")
+async def websocket_endpoint(websocket: WebSocket, username: str):
+    await websocket.accept()
+    
+    active_connections[username] = websocket
+    
+    try:
+        while True:
+            await websocket.receive_text()
+            
+    except WebSocketDisconnect:
+        del active_connections[username]
+        
+# ap endpoints
+@api_router.get("/test_ws/{username}")
+async def test_ws(username: str):
+    if username in active_connections: 
+        
+        await active_connections[username].send_json({
+            "type": "match_accept",
+            "from": "server"
+        })
+        
+        return {"status": "websocket_sent"}
+
 
 @api_router.post("/generate-otp")
 async def generate_otp(request: OTPRequest):
@@ -257,7 +293,6 @@ async def get_saa_intro_or_follow_up(request: GetSaaFollowUpOrIntroRequest):
         username=request.username
     )
 
-
     logging.info("history_message ",history_messages)
 
     if len(history_messages):
@@ -285,3 +320,63 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
     return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
 
 
+@api_router.post("/match_pairs")
+async def upsert_match_pairs(request: MatchPairsRequest):
+    logging.info("match_pairs_request: ",request.match_pairs)
+    
+    match_pairs=[tuple(pair.split("-")) for pair in request.match_pairs]
+    
+    logging.info("matched_pairs: ",match_pairs)
+    
+    count=0
+    
+    # insert new pairs to table match pairs
+    for pair in match_pairs:
+        # Generate a random UUID (Version 4)
+        match_id = str(uuid.uuid4())
+        
+        await insert_new_pair_to_match_pair_table(
+            match_id=match_id,
+            user1=pair[0],
+            user2=pair[1]
+        )
+        
+        
+        for user in pair:
+            # update users table status
+            await update_user_status_after_match(
+                match_id=match_id,
+                username=user
+            )
+            
+            # update notification table
+            # todo 
+            await insert_notification_for_user(
+                username=user,
+                category="match_found",
+                message=f"We found user {pair[1] if count==0 else pair[0]}, a perfect match for you"
+            )
+            
+            count+=1
+            
+            # send notification if socket connection is live
+            if user in active_connections:
+                await active_connections[user].send_json({
+                    "type": "match_found"
+                })
+            
+            else:
+                # Send sms via Twilio
+                try:
+                    client.messages.create(
+                        body=f"Hey {user}, Mirror found a perfect match for you, please check it out",
+                        from_=TWILIO_PHONE_NUMBER,
+                        to=await get_user_phonenumber_by_username(
+                            username=user
+                        )
+                    )
+                    print(f"send sms to user {user} successfully")
+                except Exception as e:
+                    print(f"error when sending sms to {user}, error details {e}")
+
+    return {"response": "success"}
