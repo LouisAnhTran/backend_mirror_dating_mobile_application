@@ -22,8 +22,10 @@ TWILIO_PHONE_NUMBER=os.getenv("TWILIO_PHONE_NUMBER")
 TWILIO_AUTH_TOKEN=os.getenv("TWILIO_AUTH_TOKEN")
 SAA_SERVICE_URL=os.getenv("SAA_SERVICE_URL")
 DATABASE_URL=os.getenv("DATABASE_URL")
-
+AWS_LAMBDA_FUNCTION_NAME="cupid_lambda_function_devtest"
 secret_name = "all-ai-capstone"
+AWS_ACCESS_KEY_MIRROR=os.getenv("AWS_ACCESS_KEY_MIRROR")
+AWS_SECRET_ACCESS_KEY_MIRROR=os.getenv("AWS_SECRET_ACCESS_KEY_MIRROR")
 
 # Create AWS Secrets Manager client
 client = boto3.client(

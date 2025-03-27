@@ -20,7 +20,7 @@ from pydantic import BaseModel
 import random
 from twilio.rest import Client
 import uuid
-
+import json
 
 from src.models.requests import (
     UserSignUpRequest,
@@ -32,7 +32,8 @@ from src.models.requests import (
     GetSaaFollowUpOrIntroRequest,
     GetSaaResponseRequest,
     UserOnboardingRequest,
-    MatchPairsRequest
+    MatchPairsRequest,
+    GenerateUserProfileSummaryTagsRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -74,7 +75,10 @@ from src.config import (
     OPENAI_API_KEY,
     TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN,
-    TWILIO_PHONE_NUMBER
+    TWILIO_PHONE_NUMBER,
+    AWS_LAMBDA_FUNCTION_NAME,
+    AWS_ACCESS_KEY_MIRROR,
+    AWS_SECRET_ACCESS_KEY_MIRROR
 )
 from src.utils.exceptions import return_error_param
 from src.utils.aws_operation import (
@@ -99,6 +103,8 @@ otp_store = {}
 # init s3 client
 s3_client = boto3.client('s3', 
                          aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
+
+lambda_client = boto3.client("lambda", aws_access_key_id=AWS_ACCESS_KEY_MIRROR, aws_secret_access_key=AWS_SECRET_ACCESS_KEY_MIRROR, region_name=AWS_REGION) 
 
 #init llm 
 llm = AzureChatOpenAI(
@@ -270,6 +276,8 @@ async def update_user_profile_onboarding(request_body: UserOnboardingRequest):
     
     return {"message": "User onboarded successfully"}
 
+# SAA 
+
 @api_router.get("/load_saa_conversation/{username}")
 async def load_conversation_saa_user_profile_creation(username: str):
     logging.info("username: ",username)
@@ -316,10 +324,47 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
         username=request.username,
         userquery=request.userinput
     )
+    
+    # todo
+    # update is_profile_complete user 
 
     return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
 
+@api_router.post("/get_saa_response")
+async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
+    logging.info("username: ",request.username)
+    logging.info("user query: ",request.userinput)
 
+    saa_response=await generate_saa_response(
+        username=request.username,
+        userquery=request.userinput
+    )
+    
+    # todo
+    # update is_profile_complete user 
+
+    return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
+
+@api_router.post("/generate_user_profile_summary_with_tags")
+async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSummaryTagsRequest):
+    logging.info("username: ",request.username)
+    
+    # trigger finding matching
+    response = lambda_client.invoke(
+        FunctionName=AWS_LAMBDA_FUNCTION_NAME,
+        InvocationType='Event',  # ✅ fire-and-forget
+        Payload=json.dumps({"msg": "hi lambda"})
+    )
+    
+    logging.info("response status: ",response['StatusCode'])
+    
+    # to do
+    # call APIs to generate user profile summary from SAA service
+
+    return {"response": "okie"}
+
+
+# MATCHING
 @api_router.post("/match_pairs")
 async def upsert_match_pairs(request: MatchPairsRequest):
     logging.info("match_pairs_request: ",request.match_pairs)

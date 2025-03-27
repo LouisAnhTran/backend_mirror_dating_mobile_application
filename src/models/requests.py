@@ -54,6 +54,9 @@ class GetSaaFollowUpOrIntroRequest(BaseModel):
 class GetSaaResponseRequest(BaseModel):
     username: str=Field(example='louis')
     userinput: str=Field(example='I enjoy playing sports in my freetime')
+    
+class GenerateUserProfileSummaryTagsRequest(BaseModel):
+    username: str=Field(example='louis')
 
 class OTPRequest(BaseModel):
     phone_number: str=Field(example="+6597755168")
