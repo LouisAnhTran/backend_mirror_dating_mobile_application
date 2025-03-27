@@ -4,6 +4,12 @@
 
 Install the following tools and softwares to your local machine:
 
+0. Convert poetry packages into requirements file
+
+```
+poetry export -f requirements.txt --output requirements.txt --without-hashes
+```
+
 1. Database management system:
    
 + [PostgreSQL](https://www.postgresql.org/download/)
@@ -60,4 +66,10 @@ poetry run python main.py
 
 ```
 http://loalhost:8000/docs
+```
+
+### 6. Build and Deploy:
+
+```
+ ./scripts/build_and_deploy/build_and_deploy.sh 
 ```
