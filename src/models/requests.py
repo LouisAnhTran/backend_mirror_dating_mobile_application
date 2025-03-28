@@ -30,6 +30,9 @@ class UserSignUpRequest(BaseModel):
 class MatchPairsRequest(BaseModel):
     match_pairs: List[str]
 
+class GetMatchesInfoRequest(BaseModel):
+    username: str=Field(example="louis")
+
 class UserOnboardingRequest(BaseModel):
      # Additional fields from the UPDATE statement
     username: str=Field(example="louis")

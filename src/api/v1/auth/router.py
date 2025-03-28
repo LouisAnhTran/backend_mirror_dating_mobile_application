@@ -33,7 +33,8 @@ from src.models.requests import (
     GetSaaResponseRequest,
     UserOnboardingRequest,
     MatchPairsRequest,
-    GenerateUserProfileSummaryTagsRequest
+    GenerateUserProfileSummaryTagsRequest,
+    GetMatchesInfoRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -51,7 +52,10 @@ from src.database.db_operation.user_auth.db_operations import (
     insert_new_pair_to_match_pair_table,
     update_user_status_after_match,
     get_user_phonenumber_by_username,
-    insert_notification_for_user
+    insert_notification_for_user,
+    update_user_is_profile_complete,
+    get_users_action_after_match_and_frozen,
+    get_match_profile_category_and_info
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -212,10 +216,29 @@ async def verify_otp_signing_in(verification: OTPVerification):
             phonenumber=verification.phone_number
         )
         
+        my_action=None
+        my_match_action=None
+        
+        if user[0]['status']=='frozen':
+            super_user_data=await get_users_action_after_match_and_frozen(
+                username=user[0]['username']
+            )
+            
+            if super_user_data['user_1']==user[0]['username']:
+                my_action=super_user_data['user_1_action']
+                my_match_action=super_user_data['user_2_action']
+            else:
+                my_action=super_user_data['user_2_action']
+                my_match_action=super_user_data['user_1_action']
+            
+        
         return {"status": "Verification successful",
                 "username": user[0]['username'],
                 "is_onboarding_complete": user[0]['is_onboarding_complete'],
-                "is_profile_creation_complete": user[0]['is_profile_creation_complete']
+                "is_profile_creation_complete": user[0]['is_profile_creation_complete'],
+                "user_status": user[0]['status'],
+                "my_action": my_action,
+                "my_match_action": my_match_action
                 }
         
     raise HTTPException(status_code=400, detail="Invalid OTP")
@@ -341,7 +364,9 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
     )
     
     # todo
-    # update is_profile_complete user 
+    # update is_profile_complete user
+    if saa_response['is_ended']: 
+        await update_user_is_profile_complete(username=request.username)    
 
     return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
 
@@ -425,3 +450,23 @@ async def upsert_match_pairs(request: MatchPairsRequest):
                     print(f"error when sending sms to {user}, error details {e}")
 
     return {"response": "success"}
+
+
+@api_router.post("/get_match_info")
+async def get_match_info(request: GetMatchesInfoRequest):
+    logging.info("username: ",request.username)
+    
+    # for match info request, we must return the match profile categories summary + username
+    
+    # this function help retrieve the whole record of the matched user to a specific user, for example, given user Louis, i will retrieve his match, Emma
+    match_user_record=await get_match_profile_category_and_info(
+        username=request.username
+    )
+    
+    logging.info("match_user_record: ",match_user_record)
+    
+    match_username=match_user_record['username']
+    
+    return {"match_username": match_username
+            #to do return match user summary profile
+            }

@@ -312,3 +312,70 @@ async def insert_notification_for_user(
         print("Fail to add notification for user {username}")
         logging.info("Fail to add notification for user {username}",e.args[0])
         raise RuntimeError("Server error while add pairs")
+    
+
+async def update_user_is_profile_complete(
+    username: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = '''
+        update users 
+        set 
+            is_profile_creation_complete=TRUE
+        where username=$1;
+        '''
+
+        await conn.execute(query, username)
+        
+        print(f'Successfuly update is_profile_creation_complete for user {username}')
+        logging.info(f'Successfuly update is_profile_creation_complete for user {username}')
+    except Exception as e:
+        print("Failed to update is_profile_creation_complete for user")
+        logging.info("Failed to update is_profile_creation_complete for user ",e.args[0])
+        raise RuntimeError("Server error while updating users")
+    
+async def get_users_action_after_match_and_frozen(username: str):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select *
+        from users as u, match_pairs as m
+        where u.match_reference_id = m.match_id and u.username=$1; 
+        '''
+
+        result=await conn.fetch(query,username)
+        
+        logging.info("get user action successfully")
+
+        return result[0]
+    except Exception as e:
+        print("Failed to get user action")
+        logging.info(f"Failed to retrieve user action",e.args)
+        raise RuntimeError("Server error while fetching user action")
+    
+async def get_match_profile_category_and_info(username: str):
+    conn=await get_connection()
+
+    try:
+        query=f'''
+        select *
+        from users as u1
+        where u1.match_reference_id =(
+        select 
+            u.match_reference_id
+        from users as u
+        where u.username=$1) and u1.username != $1;
+        '''
+
+        result=await conn.fetch(query,username)
+        
+        logging.info("get match profile info successfully")
+
+        return result[0]
+    except Exception as e:
+        print("Failed to get get match profile ")
+        logging.info(f"Failed to rget match profile  ",e.args)
+        raise RuntimeError("Server error while getting match profile")

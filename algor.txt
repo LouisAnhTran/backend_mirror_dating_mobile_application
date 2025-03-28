@@ -1,0 +1,11 @@
+
+
+in front end, initialize two more user state to manage match
++ your_action
++ match_action
+these 2 state are important for conditional rendering when status is set to frozen
+
+when user log in, must return addition fields as below: user A action, user B action and status => done
+
+render match profile summar => done 
+
