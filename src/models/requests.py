@@ -33,6 +33,10 @@ class MatchPairsRequest(BaseModel):
 class GetMatchesInfoRequest(BaseModel):
     username: str=Field(example="louis")
 
+class AcceptMatchRequest(BaseModel):
+    username: str=Field(example="louis")
+
+
 class UserOnboardingRequest(BaseModel):
      # Additional fields from the UPDATE statement
     username: str=Field(example="louis")

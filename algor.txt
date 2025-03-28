@@ -7,5 +7,12 @@ these 2 state are important for conditional rendering when status is set to froz
 
 when user log in, must return addition fields as below: user A action, user B action and status => done
 
-render match profile summar => done 
+render match profile summary => done except for category summary (to be updated after saa service is done)
+
+
+do accept logic
+louis click accept, frontend update redux state and louis go back to home page, text dynamically rerendered, backend also update louis action and send notificationt to emma
+emma receive notification, go to homepage, go to match icon, can view the screen to accept or reject the match
+
+
 

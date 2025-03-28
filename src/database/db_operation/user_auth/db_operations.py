@@ -379,3 +379,32 @@ async def get_match_profile_category_and_info(username: str):
         print("Failed to get get match profile ")
         logging.info(f"Failed to rget match profile  ",e.args)
         raise RuntimeError("Server error while getting match profile")
+    
+
+async def update_user_action_in_frozen_state(
+    username: str,
+    user_action_x: str, 
+    action: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = f'''
+        update match_pairs 
+            set
+                {user_action_x}=$1
+        where match_id = (
+            select 
+                u.match_reference_id
+            from users as u
+            where u.username=$2);
+        '''
+
+        await conn.execute(query,action,username)
+        
+        print(f'Successfuly update action {action} for user {username}')
+        logging.info(f'Successfuly update action {action} for user {username}')
+    except Exception as e:
+        print(f"Failed to update action {action} for user")
+        logging.info(f"Failed to update {action} for user ",e.args[0])
+        raise RuntimeError("Server error while updating users")

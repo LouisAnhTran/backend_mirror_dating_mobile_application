@@ -34,7 +34,8 @@ from src.models.requests import (
     UserOnboardingRequest,
     MatchPairsRequest,
     GenerateUserProfileSummaryTagsRequest,
-    GetMatchesInfoRequest
+    GetMatchesInfoRequest,
+    AcceptMatchRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -55,7 +56,8 @@ from src.database.db_operation.user_auth.db_operations import (
     insert_notification_for_user,
     update_user_is_profile_complete,
     get_users_action_after_match_and_frozen,
-    get_match_profile_category_and_info
+    get_match_profile_category_and_info,
+    update_user_action_in_frozen_state
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -468,5 +470,60 @@ async def get_match_info(request: GetMatchesInfoRequest):
     match_username=match_user_record['username']
     
     return {"match_username": match_username
+            #to do return match user summary profile
+            }
+
+@api_router.post("/accept_match")
+async def accept_match_request(request: AcceptMatchRequest):
+    logging.info("username of user accept the match: ",request.username)
+    
+    # accept match logic
+    user_and_match_actions=await get_users_action_after_match_and_frozen(
+        username=request.username
+    )
+    
+    logging.info("user_and_match_actions: ",user_and_match_actions)
+    
+    # first need to get match action first
+    if user_and_match_actions['user_1']==request.username:
+        match_action=user_and_match_actions['user_2_action']
+        match_user=user_and_match_actions['user_2']
+    else:
+        match_action=user_and_match_actions['user_1_action']
+        match_user=user_and_match_actions['user_1']
+
+    
+    # case 1
+    # if louis accept match with Emma but Emma has yet to accept yet, we simply update action of Louis and notifiction to Emma
+    if match_action == 'null':
+        await update_user_action_in_frozen_state(
+                username=request.username,
+                user_action_x='user_1_action' if request.username==user_and_match_actions['user_1'] else 'user_2_action'
+,
+                action='accept'
+            )
+        
+        # notify emma
+        # send notification if socket connection is live
+        if match_user in active_connections:
+            await active_connections[match_user].send_json({
+                "type": "your_match_accept"
+            })
+        
+        else:
+            # Send sms via Twilio
+            try:
+                client.messages.create(
+                    body=f"Hey {match_user}, {request.username} accept the match, please accept to start talking",
+                    from_=TWILIO_PHONE_NUMBER,
+                    to=await get_user_phonenumber_by_username(
+                        username=match_user
+                    )
+                )
+                print(f"send sms to user {match_user} successfully")
+            except Exception as e:
+                print(f"error when sending sms to {match_user}, error details {e}")
+        
+    return {"match_username": "okie"
             #to do return match user summary profile
             }
