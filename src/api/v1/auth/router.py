@@ -429,7 +429,7 @@ async def upsert_match_pairs(request: MatchPairsRequest):
             await insert_notification_for_user(
                 username=user,
                 category="match_found",
-                message=f"We found user {pair[1] if count==0 else pair[0]}, a perfect match for you"
+                message=f"Mirror has found user with username {pair[1] if count==0 else pair[0]}, which we think is a perfect match for you"
             )
             
             count+=1
@@ -494,11 +494,14 @@ async def accept_match_request(request: AcceptMatchRequest):
     else:
         match_action=user_and_match_actions['user_1_action']
         match_user=user_and_match_actions['user_1']
+        
+    logging.info("match_action: ",match_action)
+    logging.info("match_user: ",match_user)
 
     match_reference_id=user_and_match_actions['match_id']
     # case 1
     # if louis accept match with Emma but Emma has yet to accept yet, we simply update action of Louis and notifiction to Emma
-    if match_action == 'null':
+    if not match_action:
         await update_user_action_in_frozen_state(
                 username=request.username,
                 user_action_x='user_1_action' if request.username==user_and_match_actions['user_1'] else 'user_2_action',
@@ -507,6 +510,12 @@ async def accept_match_request(request: AcceptMatchRequest):
         
         # add event to notification table
         # TODO
+        await insert_notification_for_user(
+                username=match_user,
+                category="accepted_match",
+                message=f"{request.username} has accepted the match, you can also accept to start sending messages or reject"
+        )
+        
         
         # notify emma
         # send notification if socket connection is live
@@ -538,12 +547,17 @@ async def accept_match_request(request: AcceptMatchRequest):
                 action='accept'
         )
         
-        # add event to notification table
-        # TODO
-        
         # move both Louis and Emma to in chat pool
         await update_all_users_status_to_in_chat_given_match_id(
             match_id=match_reference_id
+        )
+        
+        # add event to notification table
+        # TODO
+        await insert_notification_for_user(
+                username=match_user,
+                category="accepted_match",
+                message=f"{request.username} has also accepted the match, you can start sending mesages to each other"
         )
         
         # send notification to Emma
@@ -589,7 +603,11 @@ async def reject_match_request(request: RejectMatchRequest):
     )
     
     # to do update notification table for both users
-    
+    await insert_notification_for_user(
+        username=user_get_rejected,
+        category="rejected_match",
+        message=f"{request.username} has become unavailable, you can no longer chat with this user, Mirror is working hard to find another match for you"
+    )
     
     # send notification
     if user_get_rejected in active_connections:

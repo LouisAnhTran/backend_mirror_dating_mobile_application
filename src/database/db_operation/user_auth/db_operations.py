@@ -232,7 +232,8 @@ async def get_user_phonenumber_by_username(username: str):
     except Exception as e:
         print("Failed to retrieve user phone number")
         logging.info(f"Failed to retrieve user ",e.args)
-        raise RuntimeError("Server error while fetching user phone number")
+        raise HTTPException(status_code=500,detail="Server error while fetching user phone number")
+
 
 async def insert_new_pair_to_match_pair_table(
     match_id: str,
@@ -261,7 +262,7 @@ async def insert_new_pair_to_match_pair_table(
     except Exception as e:
         print("Failed to add pair to match_pairs")
         logging.info("Failed to add pair to match_pairs, error message: ",e.args[0])
-        raise RuntimeError("Server error while add pairs")
+        raise HTTPException(status_code=500,detail="Server error while add pairs")
  
 async def update_user_status_after_match(
     match_id: str,
@@ -285,7 +286,7 @@ async def update_user_status_after_match(
     except Exception as e:
         print("Failed to update status for user")
         logging.info("Failed to update status for user ",e.args[0])
-        raise RuntimeError("Server error while updating users")
+        raise HTTPException(status_code=500,detail="Server error while updating users")
     
 async def insert_notification_for_user(
     username: str,
@@ -294,24 +295,27 @@ async def insert_notification_for_user(
 ):
     conn=await get_connection()
     
+    notification_id = str(uuid.uuid4())
+    
     try:
         query = '''
         INSERT INTO notification (
+            id,
             receiving_user, 
             category, 
             event_detail
         ) VALUES
-        ($1, $2, $3);
+        ($1,$2, $3, $4);
         '''
 
-        await conn.execute(query, username, category, message)
+        await conn.execute(query, notification_id, username, category, message)
         
         print(f'Successfuly add notification for user {username}')
         logging.info(f"Successfuly add notification for user {username}")
     except Exception as e:
         print("Fail to add notification for user {username}")
         logging.info("Fail to add notification for user {username}",e.args[0])
-        raise RuntimeError("Server error while add pairs")
+        raise HTTPException(status_code=500,detail="Server error while add pairs")
     
 
 async def update_user_is_profile_complete(
@@ -334,7 +338,7 @@ async def update_user_is_profile_complete(
     except Exception as e:
         print("Failed to update is_profile_creation_complete for user")
         logging.info("Failed to update is_profile_creation_complete for user ",e.args[0])
-        raise RuntimeError("Server error while updating users")
+        raise HTTPException(status_code=500,detail="Server error while updating users")
     
 async def get_users_action_after_match_and_frozen(username: str):
     conn=await get_connection()
@@ -354,8 +358,8 @@ async def get_users_action_after_match_and_frozen(username: str):
     except Exception as e:
         print("Failed to get user action")
         logging.info(f"Failed to retrieve user action",e.args)
-        raise RuntimeError("Server error while fetching user action")
-    
+        raise HTTPException(status_code=500,detail="Server error while fetching user action")
+       
 async def get_match_profile_category_and_info(username: str):
     conn=await get_connection()
 
@@ -378,8 +382,7 @@ async def get_match_profile_category_and_info(username: str):
     except Exception as e:
         print("Failed to get get match profile ")
         logging.info(f"Failed to rget match profile  ",e.args)
-        raise RuntimeError("Server error while getting match profile")
-    
+        raise HTTPException(status_code=500,detail="Server error while getting match profile")
 
 async def update_user_action_in_frozen_state(
     username: str,
@@ -407,7 +410,7 @@ async def update_user_action_in_frozen_state(
     except Exception as e:
         print(f"Failed to update action {action} for user")
         logging.info(f"Failed to update {action} for user ",e.args[0])
-        raise RuntimeError("Server error while updating users")
+        raise HTTPException(status_code=500,detail="Server error while updating users")
     
 async def update_all_users_status_to_in_chat_given_match_id(
     match_id: str
@@ -429,8 +432,7 @@ async def update_all_users_status_to_in_chat_given_match_id(
     except Exception as e:
         print("Failed to update status to inchat")
         logging.info(f"Failed to update user status to inchat ",e.args[0])
-        raise RuntimeError("Server error while updating users")
-    
+        raise HTTPException(status_code=500,detail="Server error while updating users")
     
 async def perform_transaction_block_to_handle_reject_event(username: str):
     conn = await get_connection()
@@ -466,5 +468,4 @@ async def perform_transaction_block_to_handle_reject_event(username: str):
 
     except Exception as e:
         logging.error(f"Failed to handle reject event for user '{username}': {e}")
-        raise RuntimeError("Server error while processing reject event")
-    
+        raise HTTPException(status_code=500,detail="Server error while processing reject event")
