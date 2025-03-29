@@ -408,3 +408,26 @@ async def update_user_action_in_frozen_state(
         print(f"Failed to update action {action} for user")
         logging.info(f"Failed to update {action} for user ",e.args[0])
         raise RuntimeError("Server error while updating users")
+    
+async def update_all_users_status_to_in_chat_given_match_id(
+    match_id: str
+):
+    conn=await get_connection()
+    
+    try:
+        query = '''
+        UPDATE users
+        SET 
+            status='in_chat'
+        WHERE match_reference_id=$1;
+        '''
+
+        await conn.execute(query,match_id)
+        
+        print('Successfuly update status to inchat')
+        logging.info('Successfuly update status to inchat')
+    except Exception as e:
+        print("Failed to update status to inchat")
+        logging.info(f"Failed to update user status to inchat ",e.args[0])
+        raise RuntimeError("Server error while updating users")
+    

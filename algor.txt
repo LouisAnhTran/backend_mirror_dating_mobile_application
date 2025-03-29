@@ -12,7 +12,10 @@ render match profile summary => done except for category summary (to be updated 
 
 do accept logic
 louis click accept, frontend update redux state and louis go back to home page, text dynamically rerendered, backend also update louis action and send notificationt to emma
-emma receive notification, go to homepage, go to match icon, can view the screen to accept or reject the match
+emma receive notification, go to homepage, go to match icon, can view the screen to accept or reject the match => done
+
+do reject logic
+
 
 
 

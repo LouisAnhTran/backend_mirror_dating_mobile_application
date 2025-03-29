@@ -57,7 +57,8 @@ from src.database.db_operation.user_auth.db_operations import (
     update_user_is_profile_complete,
     get_users_action_after_match_and_frozen,
     get_match_profile_category_and_info,
-    update_user_action_in_frozen_state
+    update_user_action_in_frozen_state,
+    update_all_users_status_to_in_chat_given_match_id
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -492,16 +493,18 @@ async def accept_match_request(request: AcceptMatchRequest):
         match_action=user_and_match_actions['user_1_action']
         match_user=user_and_match_actions['user_1']
 
-    
+    match_reference_id=user_and_match_actions['match_id']
     # case 1
     # if louis accept match with Emma but Emma has yet to accept yet, we simply update action of Louis and notifiction to Emma
     if match_action == 'null':
         await update_user_action_in_frozen_state(
                 username=request.username,
-                user_action_x='user_1_action' if request.username==user_and_match_actions['user_1'] else 'user_2_action'
-,
+                user_action_x='user_1_action' if request.username==user_and_match_actions['user_1'] else 'user_2_action',
                 action='accept'
             )
+        
+        # add event to notification table
+        # TODO
         
         # notify emma
         # send notification if socket connection is live
@@ -523,7 +526,46 @@ async def accept_match_request(request: AcceptMatchRequest):
                 print(f"send sms to user {match_user} successfully")
             except Exception as e:
                 print(f"error when sending sms to {match_user}, error details {e}")
+            
+    else: # Emma already accept, move both in chat status, update Louis action, and send notification to Louis
         
-    return {"match_username": "okie"
+        # update louis action to accept
+        await update_user_action_in_frozen_state(
+                username=request.username,
+                user_action_x='user_1_action' if request.username==user_and_match_actions['user_1'] else 'user_2_action',
+                action='accept'
+        )
+        
+        # add event to notification table
+        # TODO
+        
+        # move both Louis and Emma to in chat pool
+        await update_all_users_status_to_in_chat_given_match_id(
+            match_id=match_reference_id
+        )
+        
+        # send notification to Emma
+        # send notification if socket connection is live
+        if match_user in active_connections:
+            await active_connections[match_user].send_json({
+                "type": "your_match_accept"
+            })
+        
+        else:
+            # Send sms via Twilio
+            try:
+                client.messages.create(
+                    body=f"Hey {match_user}, {request.username} accept the match, two of you can start talking now, let say hello to {request.username}",
+                    from_=TWILIO_PHONE_NUMBER,
+                    to=await get_user_phonenumber_by_username(
+                        username=match_user
+                    )
+                )
+                print(f"send sms to user {match_user} successfully")
+            except Exception as e:
+                print(f"error when sending sms to {match_user}, error details {e}")
+        
+    return {"response": f"Your accept request has been seen to {match_user} successfully"
             #to do return match user summary profile
             }
+    
