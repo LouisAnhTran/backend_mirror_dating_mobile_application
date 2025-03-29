@@ -431,3 +431,40 @@ async def update_all_users_status_to_in_chat_given_match_id(
         logging.info(f"Failed to update user status to inchat ",e.args[0])
         raise RuntimeError("Server error while updating users")
     
+    
+async def perform_transaction_block_to_handle_reject_event(username: str):
+    conn = await get_connection()
+
+    try:
+        async with conn.transaction():
+            # 1. Delete from match_pairs
+            delete_query = '''
+                DELETE FROM match_pairs
+                WHERE match_id = (
+                    SELECT u.match_reference_id
+                    FROM users AS u
+                    WHERE u.username = $1
+                );
+            '''
+            await conn.execute(delete_query, username)
+
+            # 2. Update users
+            update_query = '''
+                UPDATE users
+                SET 
+                    match_reference_id = NULL,
+                    status = 'available'
+                WHERE match_reference_id = (
+                    SELECT match_reference_id
+                    FROM users
+                    WHERE username = $1
+                );
+            '''
+            await conn.execute(update_query, username)
+
+        logging.info(f"Successfully handled reject event for user '{username}'")
+
+    except Exception as e:
+        logging.error(f"Failed to handle reject event for user '{username}': {e}")
+        raise RuntimeError("Server error while processing reject event")
+    

@@ -35,7 +35,8 @@ from src.models.requests import (
     MatchPairsRequest,
     GenerateUserProfileSummaryTagsRequest,
     GetMatchesInfoRequest,
-    AcceptMatchRequest
+    AcceptMatchRequest,
+    RejectMatchRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -58,7 +59,8 @@ from src.database.db_operation.user_auth.db_operations import (
     get_users_action_after_match_and_frozen,
     get_match_profile_category_and_info,
     update_user_action_in_frozen_state,
-    update_all_users_status_to_in_chat_given_match_id
+    update_all_users_status_to_in_chat_given_match_id,
+    perform_transaction_block_to_handle_reject_event
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -566,6 +568,50 @@ async def accept_match_request(request: AcceptMatchRequest):
                 print(f"error when sending sms to {match_user}, error details {e}")
         
     return {"response": f"Your accept request has been seen to {match_user} successfully"
-            #to do return match user summary profile
+            }
+    
+@api_router.post("/reject_match")
+async def reject_match_request(request: RejectMatchRequest):
+    logging.info("username of user reject the match: ",request.username)
+    
+    # we need this information to know which user to send notifications
+    user_and_match=await get_users_action_after_match_and_frozen(
+        username=request.username
+    )
+    
+    user_get_rejected=user_and_match['user_2'] if request.username==user_and_match['user_1'] else user_and_match['user_1']
+    
+    logging.info("user_get_rejected: ",user_get_rejected)
+    
+    # implement transaction block to update 
+    await perform_transaction_block_to_handle_reject_event(
+        username=request.username
+    )
+    
+    # to do update notification table for both users
+    
+    
+    # send notification
+    if user_get_rejected in active_connections:
+        await active_connections[user_get_rejected].send_json({
+                "type": "your_match_reject"
+            })
+        
+    else:
+        # Send sms via Twilio
+        try:
+            client.messages.create(
+                body=f"Hey {user_get_rejected}, {request.username} is unavailable, Mirror is using her magic to find anothe match for you",
+                from_=TWILIO_PHONE_NUMBER,
+                to=await get_user_phonenumber_by_username(
+                    username=user_get_rejected
+                )
+            )
+            print(f"send sms to user {user_get_rejected} successfully")
+        except Exception as e:
+            print(f"error when sending sms to {user_get_rejected}, error details {e}")
+    
+        
+    return {"response": f"Your accept request has been seen to successfully"
             }
     

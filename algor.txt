@@ -15,6 +15,8 @@ louis click accept, frontend update redux state and louis go back to home page, 
 emma receive notification, go to homepage, go to match icon, can view the screen to accept or reject the match => done
 
 do reject logic
+user can reject a match anytime, send notification to another user, update both user status to available, update notification table for both users 
+
 
 
 

@@ -36,6 +36,8 @@ class GetMatchesInfoRequest(BaseModel):
 class AcceptMatchRequest(BaseModel):
     username: str=Field(example="louis")
 
+class RejectMatchRequest(BaseModel):
+    username: str=Field(example="louis")
 
 class UserOnboardingRequest(BaseModel):
      # Additional fields from the UPDATE statement
