@@ -12,6 +12,11 @@ from src.models.requests import (
     UserSignUpRequest,
     UserSignInRequest,
     UserOnboardingRequest)
+from src.database.prompt_template.prompt_template import (
+    CREATE_USER_SUMMARY_PROFILE
+)
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
 
 async def add_mobile_phone_and_otp(phone_number, otp_code):
     conn=await get_connection()
@@ -510,3 +515,72 @@ async def mark_notification_as_seen(notification_id: str):
         print("Failed to update notification status")
         logging.error(f"Failed to update notification status: {e}")
         raise RuntimeError("Server error while updating notification")
+    
+    
+# User profile
+
+async def get_saa_convo_user(username: str):
+    conn = await get_connection()
+
+    try:
+        query = """
+        SELECT *
+        FROM saachats AS s
+        WHERE s.username = $1 AND s.is_post_profile_convo = false
+        order by s.timestamp asc;
+        """
+        result = await conn.fetch(query, username)
+        return result
+
+    except Exception as e:
+        print("Failed to retrieve Saa conversation")
+        logging.info(f"Failed to retrieve Saa conversation: {e}")
+        raise RuntimeError("Server error while fetching Saa conversation")
+
+async def update_vector_embedding(username: str, embedding: list[float]):
+    conn = await get_connection()
+    try:
+        vector_str = str(embedding)  # Format: [0.11, 0.42, 0.87, ...]
+        query = """
+            UPDATE users
+            SET embedding = $1::vector
+            WHERE username = $2
+        """
+        await conn.execute(query, vector_str, username)
+        
+        print("store embeddings sucessfully")
+        
+    except Exception as e:
+        print(f"Failed to update embedding: {e}")
+        raise RuntimeError("Can not store embedding to DB")
+
+async def update_user_profile_summary(username: str, summary: str):
+    conn = await get_connection()
+    try:
+        query = """
+            UPDATE users
+            SET user_profile_summary = $1
+            WHERE username = $2
+        """
+        await conn.execute(query, summary, username)
+        print("User profile summary updated successfully.")
+    except Exception as e:
+        print("Failed to update user profile summary:", e)
+        raise RuntimeError("Server error while updating user profile summary")
+
+def generate_profile_summary(conversation,llm):
+
+    chat_template = PromptTemplate.from_template(CREATE_USER_SUMMARY_PROFILE)
+
+    chain = LLMChain(llm=llm, prompt=chat_template)
+
+    result = chain(
+        {
+            "conversation": conversation
+        },
+        return_only_outputs=True
+    )
+    
+    print("result: ",result['text'])
+    
+    return result['text']

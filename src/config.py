@@ -26,6 +26,7 @@ AWS_LAMBDA_FUNCTION_NAME="cupid_lambda_function_devtest"
 secret_name = "all-ai-capstone"
 AWS_ACCESS_KEY_MIRROR=os.getenv("AWS_ACCESS_KEY_MIRROR")
 AWS_SECRET_ACCESS_KEY_MIRROR=os.getenv("AWS_SECRET_ACCESS_KEY_MIRROR")
+OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 # Create AWS Secrets Manager client
 client = boto3.client(
@@ -48,9 +49,6 @@ except ClientError as e:
 secret = get_secret_value_response['SecretString']
 
 secret_dict=json.loads(secret)
-
-# import secret from aws secret manager
-OPENAI_API_KEY=secret_dict['OPENAI_API_KEY']
 PINECONE_API_KEY=secret_dict['PINECONE_API_KEY']
 GPT4_OPENAI_API_KEY=secret_dict['GPT4_OPENAI_API_KEY']
 GTP4_OPENAI_API_BASE=secret_dict['GTP4_OPENAI_API_BASE']

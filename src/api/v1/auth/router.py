@@ -65,7 +65,11 @@ from src.database.db_operation.user_auth.db_operations import (
     update_all_users_status_to_in_chat_given_match_id,
     perform_transaction_block_to_handle_reject_event,
     get_user_notifications,
-    mark_notification_as_seen
+    mark_notification_as_seen,
+    generate_profile_summary,
+    update_user_profile_summary,
+    update_vector_embedding,
+    get_saa_convo_user
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -84,8 +88,6 @@ from src.config import (
     AWS_SECRET_ACCESS_KEY,
     AWS_BUCKET_NAME_DEV,
     AWS_REGION,
-    GPT4_OPENAI_API_KEY,
-    GTP4_OPENAI_API_BASE,
     OPENAI_API_KEY,
     TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN,
@@ -105,6 +107,7 @@ from src.gen_ai.rag_pdf.chat_processing import (
     generate_standalone_query,
     generate_system_response
 )
+from langchain_openai import ChatOpenAI
 
 api_router = APIRouter()
 
@@ -120,19 +123,23 @@ s3_client = boto3.client('s3',
 
 lambda_client = boto3.client("lambda", aws_access_key_id=AWS_ACCESS_KEY_MIRROR, aws_secret_access_key=AWS_SECRET_ACCESS_KEY_MIRROR, region_name=AWS_REGION) 
 
-#init llm 
-llm = AzureChatOpenAI(
-        azure_endpoint=GTP4_OPENAI_API_BASE,
-        openai_api_version="2023-05-15",
-        deployment_name="gpt-4-32k",
-        openai_api_key=GPT4_OPENAI_API_KEY,
-        openai_api_type="azure",
-        temperature=0,
-    )
 
-openaiembeddings=OpenAIEmbeddings(
+# init LLM, I am using gpt-4o for this project
+llm = ChatOpenAI(
+    model="gpt-4o",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
     api_key=OPENAI_API_KEY
 )
+
+# init embedding model, I am 'text-embedding-ada-002' model from Open AI
+embedding_model=OpenAIEmbeddings(
+    model='text-embedding-ada-002',
+    api_key=OPENAI_API_KEY
+)
+
 
 
 # Store WebSocket connections keyed by user_id
@@ -359,21 +366,6 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
     )
     
     # todo
-    # update is_profile_complete user 
-
-    return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
-
-@api_router.post("/get_saa_response")
-async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
-    logging.info("username: ",request.username)
-    logging.info("user query: ",request.userinput)
-
-    saa_response=await generate_saa_response(
-        username=request.username,
-        userquery=request.userinput
-    )
-    
-    # todo
     # update is_profile_complete user
     if saa_response['is_ended']: 
         await update_user_is_profile_complete(username=request.username)    
@@ -392,11 +384,40 @@ async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSu
     )
     
     logging.info("response status: ",response['StatusCode'])
+        
+    # task 2: call saa to popuate ten categories
+    # TODO TODO
     
-    # to do
-    # call APIs to generate user profile summary from SAA service
+    # task 3: BE build user profile summary
+    logging.info("username: ",request.username)
+    
+    user_convo=await get_saa_convo_user(username=request.username)
+      
+    # process user convo
+    user_convo_chat=[f"{'chatbot' if entry['role']=='assistant' else 'user'}: {entry['content']}" for entry in user_convo]
+    
+    print("user convo chat: ",user_convo_chat)
+    
+    user_profile_summary=generate_profile_summary(
+        conversation=user_convo_chat,
+        llm=llm
+    )
+    
+    print("user_profile_summary: ",user_profile_summary)
+    
+    await update_user_profile_summary(username=request.username,
+                                      summary=user_profile_summary)
+    
+    embeddings_of_user_profile=embedding_model.embed_query(user_profile_summary)
+    
+    print("embeddings_of_user_profile: ",embeddings_of_user_profile)
+    
+    print("len of embedding ",len(embeddings_of_user_profile))
+    
+    await update_vector_embedding(username=request.username,
+                                  embedding=embeddings_of_user_profile)
 
-    return {"response": "okie"}
+    return {"response": "successful"}
 
 
 # MATCHING

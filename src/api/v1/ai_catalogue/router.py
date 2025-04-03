@@ -44,8 +44,6 @@ from src.config import (
     AWS_SECRET_ACCESS_KEY,
     AWS_BUCKET_NAME_DEV,
     AWS_REGION,
-    GPT4_OPENAI_API_KEY,
-    GTP4_OPENAI_API_BASE,
     OPENAI_API_KEY
 )
 from src.utils.exceptions import return_error_param
@@ -68,16 +66,6 @@ api_router = APIRouter()
 # init s3 client
 s3_client = boto3.client('s3', 
                          aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, region_name=AWS_REGION)
-
-#init llm 
-llm = AzureChatOpenAI(
-        azure_endpoint=GTP4_OPENAI_API_BASE,
-        openai_api_version="2023-05-15",
-        deployment_name="gpt-4-32k",
-        openai_api_key=GPT4_OPENAI_API_KEY,
-        openai_api_type="azure",
-        temperature=0,
-    )
 
 openaiembeddings=OpenAIEmbeddings(
     api_key=OPENAI_API_KEY
