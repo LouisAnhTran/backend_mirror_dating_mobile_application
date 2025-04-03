@@ -378,7 +378,7 @@ async def get_match_profile_category_and_info(username: str):
         
         logging.info("get match profile info successfully")
 
-        return result[0]
+        return result[0] if result else []
     except Exception as e:
         print("Failed to get get match profile ")
         logging.info(f"Failed to rget match profile  ",e.args)
@@ -469,3 +469,44 @@ async def perform_transaction_block_to_handle_reject_event(username: str):
     except Exception as e:
         logging.error(f"Failed to handle reject event for user '{username}': {e}")
         raise HTTPException(status_code=500,detail="Server error while processing reject event")
+    
+    
+async def get_user_notifications(username: str):
+    conn = await get_connection()
+
+    try:
+        query = '''
+        SELECT *
+        FROM notification AS n
+        WHERE n.receiving_user = $1
+        ORDER BY timestamp ASC;
+        '''
+
+        result = await conn.fetch(query, username)
+
+        logging.info(f"Fetched user {username} notifications successfully")
+
+        return result
+    except Exception as e:
+        print(f"Failed to get user {username} notifications")
+        logging.error(f"Error while fetching {username} notifications: {e}")
+        raise HTTPException(status_code=500, detail="Server error while getting notifications")
+    
+async def mark_notification_as_seen(notification_id: str):
+    conn = await get_connection()
+    
+    try:
+        query = '''
+        UPDATE notification
+        SET is_seen = TRUE
+        WHERE id = $1;
+        '''
+
+        await conn.execute(query, notification_id)
+        
+        print(f'Successfully marked notification {notification_id} as seen')
+        logging.info(f'Successfully marked notification {notification_id} as seen')
+    except Exception as e:
+        print("Failed to update notification status")
+        logging.error(f"Failed to update notification status: {e}")
+        raise RuntimeError("Server error while updating notification")

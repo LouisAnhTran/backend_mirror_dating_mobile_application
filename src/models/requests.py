@@ -30,7 +30,10 @@ class UserSignUpRequest(BaseModel):
 class MatchPairsRequest(BaseModel):
     match_pairs: List[str]
 
-class GetMatchesInfoRequest(BaseModel):
+class GetMatchProfileOverview(BaseModel):
+    username: str=Field(example="louis")
+
+class GetPotentialMatchUsername(BaseModel):
     username: str=Field(example="louis")
 
 class AcceptMatchRequest(BaseModel):
@@ -38,6 +41,12 @@ class AcceptMatchRequest(BaseModel):
 
 class RejectMatchRequest(BaseModel):
     username: str=Field(example="louis")
+
+class GetNotificationRequest(BaseModel):
+    username: str=Field(example="louis")
+
+class MarkNotificationSeenRequest(BaseModel):
+    notification_id: str=Field(example="001")
 
 class UserOnboardingRequest(BaseModel):
      # Additional fields from the UPDATE statement

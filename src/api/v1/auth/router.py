@@ -34,9 +34,12 @@ from src.models.requests import (
     UserOnboardingRequest,
     MatchPairsRequest,
     GenerateUserProfileSummaryTagsRequest,
-    GetMatchesInfoRequest,
+    GetMatchProfileOverview,
     AcceptMatchRequest,
-    RejectMatchRequest
+    RejectMatchRequest,
+    GetPotentialMatchUsername,
+    GetNotificationRequest,
+    MarkNotificationSeenRequest
     )
 from src.utils.user_authentication import create_access_token
 from src.database.db_operation.pdf_query_pro.db_operations import (
@@ -60,7 +63,9 @@ from src.database.db_operation.user_auth.db_operations import (
     get_match_profile_category_and_info,
     update_user_action_in_frozen_state,
     update_all_users_status_to_in_chat_given_match_id,
-    perform_transaction_block_to_handle_reject_event
+    perform_transaction_block_to_handle_reject_event,
+    get_user_notifications,
+    mark_notification_as_seen
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -457,8 +462,8 @@ async def upsert_match_pairs(request: MatchPairsRequest):
     return {"response": "success"}
 
 
-@api_router.post("/get_match_info")
-async def get_match_info(request: GetMatchesInfoRequest):
+@api_router.post("/get_match_profile_overview")
+async def get_match_profile_overview(request: GetMatchProfileOverview):
     logging.info("username: ",request.username)
     
     # for match info request, we must return the match profile categories summary + username
@@ -475,6 +480,50 @@ async def get_match_info(request: GetMatchesInfoRequest):
     return {"match_username": match_username
             #to do return match user summary profile
             }
+
+@api_router.post("/get_match_username")
+async def get_username_of_potential_match(request: GetPotentialMatchUsername):
+    logging.info("username: ",request.username)
+    
+    # for match info request, we must return the match profile categories summary + username
+    
+    # this function help retrieve the whole record of the matched user to a specific user, for example, given user Louis, i will retrieve his match, Emma
+    match_user_record=await get_match_profile_category_and_info(
+        username=request.username
+    )
+    
+    if not match_user_record:
+        raise HTTPException(status_code=404, detail=f"There is no match for user {request.username}")
+    
+    
+    logging.info("match_user_record: ",match_user_record)
+    
+    match_username=match_user_record['username']
+    
+    return {"match_username": match_username
+            }
+    
+
+@api_router.post("/get_notification")
+async def get_username_of_potential_match(request: GetNotificationRequest):
+    logging.info("username: ",request.username)
+    
+    user_notifications=await get_user_notifications(
+        username=request.username
+    )
+        
+    return {"data": user_notifications
+            }
+    
+@api_router.post("/mark_notifcation_as_seen")
+async def mark_notifcation_as_seen(request: MarkNotificationSeenRequest):
+    logging.info("notification id: ",request.notification_id)
+    
+    await mark_notification_as_seen(notification_id=request.notification_id)
+        
+    return {"response": "mark notification as seen successfully"
+            }
+
 
 @api_router.post("/accept_match")
 async def accept_match_request(request: AcceptMatchRequest):
@@ -630,6 +679,6 @@ async def reject_match_request(request: RejectMatchRequest):
             print(f"error when sending sms to {user_get_rejected}, error details {e}")
     
         
-    return {"response": f"Your accept request has been seen to successfully"
+    return {"response": f"You has rejected the match succesfully"
             }
     
