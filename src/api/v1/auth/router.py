@@ -21,6 +21,8 @@ import random
 from twilio.rest import Client
 import uuid
 import json
+from datetime import datetime, date
+
 
 from src.models.requests import (
     UserSignUpRequest,
@@ -524,7 +526,13 @@ async def get_username_of_potential_match(request: GetPotentialMatchUsername):
     
     match_username=match_user_record['username']
     
-    return {"match_username": match_username
+    birthday = datetime.strptime(match_user_record['birthday'], "%Y-%m-%d").date()
+    today = date.today()
+    age = today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
+    
+    return {"match_username": match_username,
+            "gender": match_user_record['gender'],
+            "age": age
             }
 
 
