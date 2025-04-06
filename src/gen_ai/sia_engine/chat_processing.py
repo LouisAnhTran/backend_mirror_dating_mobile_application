@@ -136,6 +136,21 @@ async def generate_saa_intro(
         raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
 
 
+async def generate_user_profile_summary_with_tags_saa(
+    username: str,
+):
+    logging.info("username: ",username)
+    
+    # call Saa service api
+    payload = {"username": username}
+
+    try:
+        async with httpx.AsyncClient(timeout=120) as client:
+            response = await client.post(SAA_SERVICE_URL+'generate_user_profile_summary_tags', json=payload)
+            response.raise_for_status()
+            print("saa_response: ",response.json())
+    except httpx.HTTPError as e:
+        raise HTTPException(status_code=500, detail=f"Error calling external API from Saa service: {str(e)}")
 
 
 async def generate_saa_response(

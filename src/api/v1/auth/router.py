@@ -69,7 +69,8 @@ from src.database.db_operation.user_auth.db_operations import (
     generate_profile_summary,
     update_user_profile_summary,
     update_vector_embedding,
-    get_saa_convo_user
+    get_saa_convo_user,
+    add_unmatch_pair
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -80,7 +81,8 @@ from src.utils.user_authentication import (
 from src.gen_ai.sia_engine.chat_processing import (
     generate_saa_follow_up_question,
     generate_saa_intro,
-    generate_saa_response
+    generate_saa_response,
+    generate_user_profile_summary_with_tags_saa
 )
 from src.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
@@ -387,6 +389,7 @@ async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSu
         
     # task 2: call saa to popuate ten categories
     # TODO TODO
+    await generate_user_profile_summary_with_tags_saa(username=request.username)
     
     # task 3: BE build user profile summary
     logging.info("username: ",request.username)
@@ -523,6 +526,29 @@ async def get_username_of_potential_match(request: GetPotentialMatchUsername):
     
     return {"match_username": match_username
             }
+
+
+@api_router.post("/get_match_telegram_handle")
+async def get_username_of_potential_match(request: GetPotentialMatchUsername):
+    logging.info("username: ",request.username)
+    
+    # for match info request, we must return the match profile categories summary + username
+    
+    # this function help retrieve the whole record of the matched user to a specific user, for example, given user Louis, i will retrieve his match, Emma
+    match_user_record=await get_match_profile_category_and_info(
+        username=request.username
+    )
+    
+    if not match_user_record:
+        raise HTTPException(status_code=404, detail=f"There is no match for user {request.username}")
+    
+    logging.info("match_user_record: ",match_user_record)
+    
+    match_username=match_user_record['username']
+    
+    return {"match_username": match_username
+            }
+    
     
 
 @api_router.post("/get_notification")
@@ -672,6 +698,11 @@ async def reject_match_request(request: RejectMatchRequest):
         username=request.username
     )
     
+    # TO DO
+    # add unmatched pair to unmatch table to avoid future matching 
+    await add_unmatch_pair(username1=request.username,
+                           username2=user_get_rejected)
+    
     # to do update notification table for both users
     await insert_notification_for_user(
         username=user_get_rejected,
@@ -689,7 +720,7 @@ async def reject_match_request(request: RejectMatchRequest):
         # Send sms via Twilio
         try:
             client.messages.create(
-                body=f"Hey {user_get_rejected}, {request.username} is unavailable, Mirror is using her magic to find anothe match for you",
+                body=f"Hey {user_get_rejected}, {request.username} is unavailable, Mirror is using her magic to find another match for you",
                 from_=TWILIO_PHONE_NUMBER,
                 to=await get_user_phonenumber_by_username(
                     username=user_get_rejected

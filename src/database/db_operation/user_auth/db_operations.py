@@ -514,8 +514,22 @@ async def mark_notification_as_seen(notification_id: str):
     except Exception as e:
         print("Failed to update notification status")
         logging.error(f"Failed to update notification status: {e}")
-        raise RuntimeError("Server error while updating notification")
+        raise HTTPException(status_code=500,detail="Server error while updating notification")
+
+async def add_unmatch_pair(username1: str, username2: str):
+    conn = await get_connection()
     
+    try:
+        query = '''
+        INSERT INTO unmatch_pairs (username1, username2)
+        VALUES ($1, $2);
+        '''
+        await conn.execute(query, username1, username2)
+        
+        logging.info(f'Successfully added unmatch pair: {username1} and {username2}')
+    except Exception as e:
+        logging.error(f"Failed to add unmatch pair: {e}")
+        raise HTTPException(status_code=500,detail="Server error while adding unmatch pair")
     
 # User profile
 
@@ -584,3 +598,5 @@ def generate_profile_summary(conversation,llm):
     print("result: ",result['text'])
     
     return result['text']
+
+
