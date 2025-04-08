@@ -581,6 +581,20 @@ async def update_user_profile_summary(username: str, summary: str):
     except Exception as e:
         print("Failed to update user profile summary:", e)
         raise RuntimeError("Server error while updating user profile summary")
+    
+async def update_user_status(username: str, status: str = "available"):
+    conn = await get_connection()
+    try:
+        query = """
+            UPDATE users
+            SET status = $1
+            WHERE username = $2
+        """
+        await conn.execute(query, status, username)
+        print(f"User '{username}' account status set to '{status}'.")
+    except Exception as e:
+        print("Failed to update user status:", e)
+        raise RuntimeError("Server error while updating user status")
 
 async def get_user_record_by_username(username: str):
     conn = await get_connection()

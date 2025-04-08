@@ -73,7 +73,8 @@ from src.database.db_operation.user_auth.db_operations import (
     update_vector_embedding,
     get_saa_convo_user,
     add_unmatch_pair,
-    get_user_record_by_username
+    get_user_record_by_username,
+    update_user_status
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -744,6 +745,12 @@ async def reject_match_request(request: RejectMatchRequest):
         category="rejected_match",
         message=f"{request.username} has become unavailable, you can no longer chat with this user, Mirror is working hard to find another match for you"
     )
+    
+    # To do change user status from frozen to availble
+    await update_user_status(username=request.username,status='available')
+    
+    await update_user_status(username=user_get_rejected,status='available')
+    
     
     # send notification
     if user_get_rejected in active_connections:
