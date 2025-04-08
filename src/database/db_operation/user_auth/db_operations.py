@@ -582,6 +582,23 @@ async def update_user_profile_summary(username: str, summary: str):
         print("Failed to update user profile summary:", e)
         raise RuntimeError("Server error while updating user profile summary")
 
+async def get_user_record_by_username(username: str):
+    conn = await get_connection()
+    try:
+        query = """
+            SELECT *
+            FROM users AS u
+            WHERE u.username = $1
+        """
+        result = await conn.fetch(query, username)
+        
+        return result
+    except Exception as e:
+        print("Failed to fetch user:", e)
+        raise RuntimeError("Server error while fetching user")
+
+
+
 def generate_profile_summary(conversation,llm):
 
     chat_template = PromptTemplate.from_template(CREATE_USER_SUMMARY_PROFILE)

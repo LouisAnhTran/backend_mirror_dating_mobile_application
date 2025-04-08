@@ -72,7 +72,8 @@ from src.database.db_operation.user_auth.db_operations import (
     update_user_profile_summary,
     update_vector_embedding,
     get_saa_convo_user,
-    add_unmatch_pair
+    add_unmatch_pair,
+    get_user_record_by_username
 )
 from src.utils.user_authentication import (
     hash_password,
@@ -423,6 +424,29 @@ async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSu
                                   embedding=embeddings_of_user_profile)
 
     return {"response": "successful"}
+
+@api_router.get("/get_match_profile_summary_with_tags/{username}")
+async def read_user(username: str):
+    logging.info("username: ",username)
+    
+    user_record=await get_user_record_by_username(
+        username=username
+    )
+    
+    if not user_record:
+        raise HTTPException(status_code=403,detail="Can not find profile details for this user")
+    
+    logging.info("user record: ",user_record)
+    
+    user_summary_with_tags=user_record[0]['user_profile_summary_tags']
+    
+    logging.info("user_summary_with_tags: ",user_summary_with_tags)
+    
+    json_formatted_profile=json.loads(user_summary_with_tags)
+    
+    logging.info("result: ",json_formatted_profile)
+    
+    return {"response": json_formatted_profile}
 
 
 # MATCHING
