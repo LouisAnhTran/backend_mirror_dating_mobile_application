@@ -377,18 +377,21 @@ async def get_saa_request_given_user_query(request: GetSaaResponseRequest):
 
     return {"response": saa_response['body'],"is_ended":saa_response['is_ended']}
 
+    # return {"response": saa_response['body'],"is_ended":True}
+
+
 @api_router.post("/generate_user_profile_summary_with_tags")
 async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSummaryTagsRequest):
     logging.info("username: ",request.username)
     
-    # trigger finding matching
-    response = lambda_client.invoke(
-        FunctionName=AWS_LAMBDA_FUNCTION_NAME,
-        InvocationType='Event',  # ✅ fire-and-forget
-        Payload=json.dumps({"msg": "hi lambda"})
-    )
+    # # trigger finding matching
+    # response = lambda_client.invoke(
+    #     FunctionName=AWS_LAMBDA_FUNCTION_NAME,
+    #     InvocationType='Event',  # ✅ fire-and-forget
+    #     Payload=json.dumps({"msg": "hi lambda"})
+    # )
     
-    logging.info("response status: ",response['StatusCode'])
+    # logging.info("response status: ",response['StatusCode'])
         
     # task 2: call saa to popuate ten categories
     # TODO TODO
@@ -561,7 +564,7 @@ async def get_username_of_potential_match(request: GetPotentialMatchUsername):
 
 
 @api_router.post("/get_match_telegram_handle")
-async def get_username_of_potential_match(request: GetPotentialMatchUsername):
+async def get_match_telegram_handle(request: GetPotentialMatchUsername):
     logging.info("username: ",request.username)
     
     # for match info request, we must return the match profile categories summary + username
@@ -576,19 +579,19 @@ async def get_username_of_potential_match(request: GetPotentialMatchUsername):
     
     logging.info("match_user_record: ",match_user_record)
     
-    match_username=match_user_record['username']
+    telegram_handle=match_user_record['telegram_handle']
     
-    return {"match_username": match_username
+    return {"response": telegram_handle
             }
     
     
 
-@api_router.post("/get_notification")
-async def get_username_of_potential_match(request: GetNotificationRequest):
-    logging.info("username: ",request.username)
+@api_router.get("/get_notification/{username}")
+async def get_username_of_potential_match(username: str):
+    logging.info("username: ",username)
     
     user_notifications=await get_user_notifications(
-        username=request.username
+        username=username
     )
         
     return {"data": user_notifications
