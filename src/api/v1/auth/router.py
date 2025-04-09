@@ -433,6 +433,31 @@ async def generate_user_profile_summary_with_tags(request: GenerateUserProfileSu
 async def read_user(username: str):
     logging.info("username: ",username)
     
+    user_match_ecord=await get_match_profile_category_and_info(
+        username=username
+    )
+    
+    logging.info("user_match_record: ",user_match_ecord)
+    
+    if not user_match_ecord:
+        raise HTTPException(status_code=403,detail="Can not find profile details for this user")
+    
+    logging.info("user record: ",user_match_ecord)
+    
+    user_summary_with_tags=user_match_ecord['user_profile_summary_tags']
+    
+    logging.info("user_summary_with_tags: ",user_summary_with_tags)
+    
+    json_formatted_profile=json.loads(user_summary_with_tags)
+    
+    logging.info("result: ",json_formatted_profile)
+    
+    return {"response": json_formatted_profile}
+
+@api_router.get("/get_own_user_profile_summary_with_tags/{username}")
+async def read_user(username: str):
+    logging.info("username: ",username)
+    
     user_record=await get_user_record_by_username(
         username=username
     )
@@ -451,6 +476,23 @@ async def read_user(username: str):
     logging.info("result: ",json_formatted_profile)
     
     return {"response": json_formatted_profile}
+
+@api_router.get("/get_own_user_information/{username}")
+async def read_user(username: str):
+    logging.info("username: ",username)
+    
+    user_record=await get_user_record_by_username(
+        username=username
+    )
+    
+    if not user_record:
+        raise HTTPException(status_code=403,detail="Can not find profile details for this user")
+    
+    logging.info("user record: ",user_record)
+    
+    user_record=user_record[0]
+    
+    return {"response": user_record}
 
 
 # MATCHING

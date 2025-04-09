@@ -369,7 +369,7 @@ async def get_match_profile_category_and_info(username: str):
     conn=await get_connection()
 
     try:
-        query=f'''
+        query="""
         select *
         from users as u1
         where u1.match_reference_id =(
@@ -377,9 +377,11 @@ async def get_match_profile_category_and_info(username: str):
             u.match_reference_id
         from users as u
         where u.username=$1) and u1.username != $1;
-        '''
+        """
 
         result=await conn.fetch(query,username)
+        
+        logging.info("result_result: ",result)
         
         logging.info("get match profile info successfully")
 
